@@ -1,1 +1,1 @@
-const double paddingSpace = 24;
+const double paddingSpace = 36;
