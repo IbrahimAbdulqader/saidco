@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "626596124525",
+    "firebase_url": "https://saidco-657c5-default-rtdb.firebaseio.com",
+    "project_id": "saidco-657c5",
+    "storage_bucket": "saidco-657c5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626596124525:android:825e024273ce05de27ec64",
+        "android_client_info": {
+          "package_name": "com.example.saidco"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTrbBbN56-IuG-wGe-qa2eZrRYFaSxei4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
