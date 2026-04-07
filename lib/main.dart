@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [Locale('en'), Locale('ar')],
       theme: ThemeData(
-        textTheme: GoogleFonts.cairoTextTheme(),
+        textTheme: GoogleFonts.alexandriaTextTheme(),
         // colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const HomePage(),
