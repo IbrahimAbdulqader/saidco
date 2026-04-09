@@ -43,6 +43,9 @@ class _MainLayoutState extends State<MainLayout> {
                   alpha: 0.5,
                 ),
                 indicatorColor: Colors.deepPurple.withValues(alpha: 0.2),
+                indicatorShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 unselectedIconTheme: IconThemeData(color: Colors.grey[700]),
                 selectedIconTheme: IconThemeData(color: Colors.deepPurple),
                 unselectedLabelTextStyle: TextStyle(color: Colors.grey[700]),

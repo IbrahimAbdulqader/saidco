@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FormResponse {
   final String formId;
   final String name;
@@ -9,6 +11,8 @@ class FormResponse {
   final String hotelPreferences;
   final String flightPreferences;
   final String additionalInfo;
+  final Timestamp submissionDate;
+  final bool isContacted;
 
   FormResponse({
     required this.formId,
@@ -21,11 +25,13 @@ class FormResponse {
     required this.hotelPreferences,
     required this.flightPreferences,
     required this.additionalInfo,
+    required this.submissionDate,
+    required this.isContacted,
   });
 
   factory FormResponse.fromJson(Map<String, dynamic> jsonData) {
     return FormResponse(
-      formId: jsonData['formId'] ?? 'Form ID not found',
+      formId: jsonData['responseId'] ?? 'Form ID not found',
       name: jsonData['اسم العميل'] ?? 'Name not found',
       phoneNumber: jsonData['رقم هاتف العميل'] ?? 'Phone number not found',
       programLevel: jsonData['حدد مستوى البرنامج'] ?? 'Program level not found',
@@ -45,6 +51,8 @@ class FormResponse {
       additionalInfo:
           jsonData['(اختياري) هل لديك أي ملاحظات اخرى ؟'] ??
           'Additional info not found',
+      submissionDate: jsonData['submissionDate'] ?? Timestamp.now(),
+      isContacted: jsonData['isContacted'] ?? false,
     );
   }
 }

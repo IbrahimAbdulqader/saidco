@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saidco/services/remote_form_response_service.dart';
 import 'package:saidco/ui/common/data_cell.dart';
 import 'package:saidco/ui/common/header_cell.dart';
-import 'package:saidco/ui/app/profile/profile_page.dart';
+import 'package:saidco/ui/app/profile/profile_dialog.dart';
 import 'package:saidco/ui/common/layouts/main_layout.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,42 +24,75 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-            child: const Row(
-              children: [
-                HeaderCell(icon: Icons.person, text: 'الاسم', flex: 3),
-                HeaderCell(icon: Icons.phone, text: 'رقم الهاتف', flex: 2),
-                HeaderCell(icon: Icons.grade, text: 'المستوى', flex: 2),
-                HeaderCell(
-                  icon: Icons.date_range,
-                  text: 'تاريخ السفر',
-                  flex: 2,
+      body: StreamBuilder(
+        stream: _formStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'حدث خطأ أثناء تحميل البيانات: ${snapshot.error}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
                 ),
-                HeaderCell(icon: Icons.timelapse, text: 'عدد الأيام', flex: 2),
-                HeaderCell(icon: Icons.hotel, text: 'نوع الغرفة', flex: 2),
-                SizedBox(width: 26),
-              ],
-            ),
-          ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 75),
+                child: Text(
+                  'لا يوجد بيانات لعرضها',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            );
+          }
 
-          const SizedBox(height: 16),
-          Expanded(
-            child: StreamBuilder(
-              stream: _formStream,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('لا يوجد بيانات لعرضها'));
-                }
+          final responses = snapshot.data!;
 
-                final responses = snapshot.data!;
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 20,
+                ),
+                child: const Row(
+                  children: [
+                    HeaderCell(icon: Icons.person, text: 'الاسم', flex: 3),
+                    HeaderCell(icon: Icons.phone, text: 'رقم الهاتف', flex: 2),
+                    HeaderCell(icon: Icons.grade, text: 'المستوى', flex: 2),
+                    HeaderCell(
+                      icon: Icons.date_range,
+                      text: 'تاريخ السفر',
+                      flex: 2,
+                    ),
+                    HeaderCell(
+                      icon: Icons.timelapse,
+                      text: 'عدد الأيام',
+                      flex: 2,
+                    ),
+                    HeaderCell(icon: Icons.hotel, text: 'نوع الغرفة', flex: 2),
+                    HeaderCell(
+                      icon: Icons.forum,
+                      text: 'حالة التواصل',
+                      flex: 2,
+                    ),
+                    SizedBox(width: 26),
+                  ],
+                ),
+              ),
 
-                return ListView.separated(
+              const SizedBox(height: 16),
+              Expanded(
+                child: ListView.separated(
                   padding: EdgeInsets.zero,
                   itemCount: responses.length,
                   separatorBuilder: (context, index) =>
@@ -75,24 +108,10 @@ class _HomePageState extends State<HomePage> {
                         hoverColor: Colors.grey.withValues(alpha: 0.1),
                         splashColor: Colors.deepPurple.withValues(alpha: 0.15),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                              transitionsBuilder:
-                                  (
-                                    context,
-                                    animation,
-                                    secondaryAnimaiton,
-                                    child,
-                                  ) => child,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      ProfilePage(
-                                        formResponse: responses[index],
-                                      ),
-                            ),
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                                ProfileDialog(formResponse: response),
                           );
                         },
                         borderRadius: BorderRadius.circular(12),
@@ -128,6 +147,15 @@ class _HomePageState extends State<HomePage> {
                                     : response.roomType,
                                 flex: 2,
                               ),
+                              TextCell(
+                                text: response.isContacted
+                                    ? 'تم التواصل'
+                                    : 'لم يتم التواصل',
+                                flex: 2,
+                                color: response.isContacted
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
                               Icon(
                                 Icons.arrow_forward_ios,
                                 size: 16,
@@ -139,11 +167,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   },
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

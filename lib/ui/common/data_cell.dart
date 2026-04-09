@@ -6,11 +6,13 @@ class TextCell extends StatelessWidget {
     required this.text,
     required this.flex,
     this.isBold = false,
+    this.color,
   });
 
   final String text;
   final int flex;
   final bool isBold;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class TextCell extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.black87,
+          color: color ?? Colors.black87,
           fontSize: 15,
           fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
         ),

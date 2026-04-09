@@ -8,13 +8,21 @@ class RemoteFormResponseService extends FormResponseService {
   @override
   Stream<List<FormResponse>> getFormResponse() {
     try {
-      return _firestore.collection('form_submissions').snapshots().map((
-        snapshot,
-      ) {
-        return snapshot.docs.map((doc) {
-          return FormResponse.fromJson(doc.data());
-        }).toList();
-      });
+      return _firestore
+          .collection('form_submissions')
+          // .orderBy('timestamp', descending: true)
+          .snapshots()
+          .map((snapshot) {
+            List<FormResponse> responses = snapshot.docs.map((doc) {
+              return FormResponse.fromJson(doc.data());
+            }).toList();
+
+            responses.sort(
+              (a, b) => b.submissionDate.compareTo(a.submissionDate),
+            );
+
+            return responses;
+          });
     } catch (e) {
       throw Exception('Failed to fetch form response: $e');
     }
