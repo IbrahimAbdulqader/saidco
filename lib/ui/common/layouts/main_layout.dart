@@ -13,7 +13,11 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int selectedIndex = 0;
-  List<String> titles = ['الرئيسية', 'الملف الشخصي', 'الإعدادات'];
+  List<String> titles = [
+    'تسجيلات العملاء',
+    'ادارة التسكينات',
+    'ادارة الحسابات',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -70,19 +74,19 @@ class _MainLayoutState extends State<MainLayout> {
                     padding: EdgeInsets.only(bottom: 12),
                     icon: Icon(Icons.table_chart_outlined),
                     selectedIcon: Icon(Icons.table_chart),
-                    label: Text('الرئيسية'),
+                    label: Text('تسجيلات العملاء'),
                   ),
                   NavigationRailDestination(
                     padding: EdgeInsets.symmetric(horizontal: 12),
-                    icon: Icon(Icons.account_box_outlined),
-                    selectedIcon: Icon(Icons.account_box),
-                    label: Text('الملف الشخصي'),
+                    icon: Icon(Icons.hotel_outlined),
+                    selectedIcon: Icon(Icons.hotel),
+                    label: Text('ادارة التسكينات'),
                   ),
                   NavigationRailDestination(
                     padding: EdgeInsets.only(top: 12),
-                    icon: Icon(Icons.settings_outlined),
-                    selectedIcon: Icon(Icons.settings),
-                    label: Text('الإعدادات'),
+                    icon: Icon(Icons.account_balance_outlined),
+                    selectedIcon: Icon(Icons.account_balance),
+                    label: Text('ادارة الحسابات'),
                   ),
                 ],
                 selectedIndex: selectedIndex,

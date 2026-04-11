@@ -7,16 +7,18 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.backgroundColor,
     this.foregroundColor,
+    this.width,
   });
   final String text;
   final VoidCallback onPressed;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 165,
+      width: width ?? 165,
       height: 35,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -32,7 +34,7 @@ class CustomButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             color: foregroundColor ?? Colors.deepPurpleAccent[500],
           ),
         ),

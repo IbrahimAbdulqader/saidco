@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:saidco/services/remote_form_response_service.dart';
+import 'package:saidco/ui/common/custom_button.dart';
+import 'package:saidco/ui/common/custom_rich_text.dart';
 import 'package:saidco/ui/common/data_cell.dart';
 import 'package:saidco/ui/common/header_cell.dart';
 import 'package:saidco/ui/app/profile/profile_dialog.dart';
@@ -20,6 +24,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _formStream = RemoteFormResponseService().getFormResponse();
   }
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +72,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: const Row(
                   children: [
+                    SizedBox(width: 16),
                     HeaderCell(icon: Icons.person, text: 'الاسم', flex: 3),
                     HeaderCell(icon: Icons.phone, text: 'رقم الهاتف', flex: 2),
                     HeaderCell(icon: Icons.grade, text: 'المستوى', flex: 2),
@@ -116,9 +123,10 @@ class _HomePageState extends State<HomePage> {
                         },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 16,
+                          padding: const EdgeInsets.only(
+                            left: 24,
+                            top: 16,
+                            bottom: 16,
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
@@ -132,6 +140,100 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Row(
                             children: [
+                              PopupMenuButton(
+                                position: PopupMenuPosition.under,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: EdgeInsets.zero,
+                                menuPadding: EdgeInsets.zero,
+                                iconColor: Colors.grey[400],
+                                iconSize: 20,
+                                itemBuilder: (context) {
+                                  return [
+                                    PopupMenuItem(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            content: SizedBox(
+                                              height: 200,
+                                              width: 350,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  8.0,
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        'هل أنت متأكد من حذف هذا التسجيل؟',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 40),
+                                                    Text(
+                                                      'بإسم : ${response.name}',
+                                                    ),
+                                                    Spacer(),
+                                                    Row(
+                                                      children: [
+                                                        CustomButton(
+                                                          width: 130,
+                                                          text: 'إغلاق',
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                context,
+                                                              ),
+                                                        ),
+                                                        Spacer(),
+                                                        CustomButton(
+                                                          width: 140,
+                                                          text: 'حذف التسجيل',
+                                                          backgroundColor:
+                                                              Colors.redAccent
+                                                                  .withValues(
+                                                                    alpha: 0.35,
+                                                                  ),
+                                                          foregroundColor:
+                                                              Colors.red[700],
+                                                          onPressed: () {
+                                                            firestore
+                                                                .collection(
+                                                                  'form_submissions',
+                                                                )
+                                                                .doc(
+                                                                  response
+                                                                      .formId,
+                                                                )
+                                                                .delete();
+                                                            Navigator.pop(
+                                                              context,
+                                                            );
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'حذف التسجيل',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ];
+                                },
+                              ),
                               TextCell(
                                 text: response.name,
                                 flex: 3,
