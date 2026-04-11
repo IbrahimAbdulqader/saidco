@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:saidco/ui/common/custom_app_bar.dart';
-import 'package:saidco/ui/values/spaces.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key, required this.body});
@@ -102,7 +101,10 @@ class _MainLayoutState extends State<MainLayout> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(paddingSpace),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 36,
+                  ),
                   child: Column(
                     children: [
                       SizedBox(height: 100),

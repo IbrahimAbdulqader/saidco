@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:saidco/enums/filtering_enums.dart';
 import 'package:saidco/services/remote_form_response_service.dart';
 import 'package:saidco/ui/common/custom_button.dart';
-import 'package:saidco/ui/common/custom_rich_text.dart';
 import 'package:saidco/ui/common/data_cell.dart';
 import 'package:saidco/ui/common/header_cell.dart';
 import 'package:saidco/ui/app/profile/profile_dialog.dart';
@@ -26,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FilteringStatus filterStatus = FilteringStatus.all;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +33,8 @@ class _HomePageState extends State<HomePage> {
       body: StreamBuilder(
         stream: _formStream,
         builder: (context, snapshot) {
+          final responses = snapshot.data!;
+          
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -61,38 +63,81 @@ class _HomePageState extends State<HomePage> {
             );
           }
 
-          final responses = snapshot.data!;
-
           return Column(
             children: [
+              SegmentedButton(
+                style: SegmentedButton.styleFrom(),
+                segments: [
+                  ButtonSegment(
+                    label: SizedBox(
+                      width: 100,
+                      child: Center(child: Text('الكل')),
+                    ),
+                    value: FilteringStatus.all,
+                  ),
+                  ButtonSegment(
+                    label: SizedBox(
+                      width: 100,
+                      child: Center(child: Text('لم يتم التواصل')),
+                    ),
+                    value: FilteringStatus.notContacted,
+                  ),
+                  ButtonSegment(
+                    label: SizedBox(
+                      width: 100,
+                      child: Center(child: Text('تم التواصل')),
+                    ),
+                    value: FilteringStatus.isContacted,
+                  ),
+                ],
+                selected: {filterStatus},
+                onSelectionChanged: (Set newFilterStatus) {
+                  setState(() {
+                    filterStatus = newFilterStatus.first;
+                  });
+                },
+              ),
+              SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 8,
                   horizontal: 20,
                 ),
-                child: const Row(
+                child: Column(
                   children: [
-                    SizedBox(width: 16),
-                    HeaderCell(icon: Icons.person, text: 'الاسم', flex: 3),
-                    HeaderCell(icon: Icons.phone, text: 'رقم الهاتف', flex: 2),
-                    HeaderCell(icon: Icons.grade, text: 'المستوى', flex: 2),
-                    HeaderCell(
-                      icon: Icons.date_range,
-                      text: 'تاريخ السفر',
-                      flex: 2,
+                    const Row(
+                      children: [
+                        SizedBox(width: 16),
+                        HeaderCell(icon: Icons.person, text: 'الاسم', flex: 3),
+                        HeaderCell(
+                          icon: Icons.phone,
+                          text: 'رقم الهاتف',
+                          flex: 2,
+                        ),
+                        HeaderCell(icon: Icons.grade, text: 'المستوى', flex: 2),
+                        HeaderCell(
+                          icon: Icons.date_range,
+                          text: 'تاريخ السفر',
+                          flex: 2,
+                        ),
+                        HeaderCell(
+                          icon: Icons.timelapse,
+                          text: 'عدد الأيام',
+                          flex: 2,
+                        ),
+                        HeaderCell(
+                          icon: Icons.hotel,
+                          text: 'نوع الغرفة',
+                          flex: 2,
+                        ),
+                        HeaderCell(
+                          icon: Icons.forum,
+                          text: 'حالة التواصل',
+                          flex: 2,
+                        ),
+                        SizedBox(width: 26),
+                      ],
                     ),
-                    HeaderCell(
-                      icon: Icons.timelapse,
-                      text: 'عدد الأيام',
-                      flex: 2,
-                    ),
-                    HeaderCell(icon: Icons.hotel, text: 'نوع الغرفة', flex: 2),
-                    HeaderCell(
-                      icon: Icons.forum,
-                      text: 'حالة التواصل',
-                      flex: 2,
-                    ),
-                    SizedBox(width: 26),
                   ],
                 ),
               ),
@@ -147,8 +192,17 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 padding: EdgeInsets.zero,
                                 menuPadding: EdgeInsets.zero,
-                                iconColor: Colors.grey[400],
-                                iconSize: 20,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 16,
+                                    left: 4,
+                                  ),
+                                  child: Icon(
+                                    Icons.more_vert,
+                                    size: 20,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
                                 itemBuilder: (context) {
                                   return [
                                     PopupMenuItem(
@@ -176,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                                                         ),
                                                       ),
                                                     ),
-                                                    SizedBox(height: 40),
+                                                    SizedBox(height: 50),
                                                     Text(
                                                       'بإسم : ${response.name}',
                                                     ),
