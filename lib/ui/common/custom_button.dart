@@ -23,13 +23,14 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
+
           backgroundColor:
               backgroundColor ??
               Colors.deepPurpleAccent[100]!.withValues(alpha: 0.35),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-        ),
+        ).copyWith(elevation: WidgetStateProperty.all(0)),
         onPressed: onPressed,
         child: Text(
           text,

@@ -16,16 +16,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final Stream<List<dynamic>> _formStream;
+  late Stream<List<dynamic>> _formStream;
 
   @override
   void initState() {
     super.initState();
-    _formStream = RemoteFormResponseService().getFormResponse();
+    updateStream();
   }
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FilteringStatus filterStatus = FilteringStatus.all;
+  FilterStatus filterStatus = FilterStatus.all;
+
+  void updateStream() {
+    _formStream = RemoteFormResponseService().getFormResponse(
+      filterStatus.name,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +39,6 @@ class _HomePageState extends State<HomePage> {
       body: StreamBuilder(
         stream: _formStream,
         builder: (context, snapshot) {
-          final responses = snapshot.data!;
-          
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -63,39 +67,47 @@ class _HomePageState extends State<HomePage> {
             );
           }
 
+          final responses = snapshot.data!;
+
           return Column(
             children: [
-              SegmentedButton(
-                style: SegmentedButton.styleFrom(),
-                segments: [
-                  ButtonSegment(
-                    label: SizedBox(
-                      width: 100,
-                      child: Center(child: Text('الكل')),
-                    ),
-                    value: FilteringStatus.all,
-                  ),
-                  ButtonSegment(
-                    label: SizedBox(
-                      width: 100,
-                      child: Center(child: Text('لم يتم التواصل')),
-                    ),
-                    value: FilteringStatus.notContacted,
-                  ),
-                  ButtonSegment(
-                    label: SizedBox(
-                      width: 100,
-                      child: Center(child: Text('تم التواصل')),
-                    ),
-                    value: FilteringStatus.isContacted,
-                  ),
-                ],
-                selected: {filterStatus},
-                onSelectionChanged: (Set newFilterStatus) {
+              ToggleButtons(
+                constraints: BoxConstraints(maxHeight: 35, minHeight: 35),
+                borderRadius: BorderRadius.circular(12),
+                borderWidth: 2,
+                borderColor: Colors.grey[500],
+                selectedBorderColor: Colors.deepPurple.withValues(alpha: 0.8),
+                selectedColor: Colors.deepPurple.withValues(alpha: 0.8),
+                fillColor: Colors.deepPurple.withValues(alpha: 0.2),
+                textStyle: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+                onPressed: (index) {
                   setState(() {
-                    filterStatus = newFilterStatus.first;
+                    if (index == 0) filterStatus = FilterStatus.all;
+                    if (index == 1) filterStatus = FilterStatus.notContacted;
+                    if (index == 2) filterStatus = FilterStatus.isContacted;
+                    updateStream();
                   });
                 },
+                isSelected: [
+                  filterStatus == FilterStatus.all,
+                  filterStatus == FilterStatus.notContacted,
+                  filterStatus == FilterStatus.isContacted,
+                ],
+                children: [
+                  SizedBox(width: 120, child: Center(child: Text('الكل'))),
+                  SizedBox(
+                    width: 120,
+                    child: Center(child: Text('لم يتم التواصل')),
+                  ),
+                  SizedBox(
+                    width: 120,
+                    child: Center(child: Text('تم التواصل')),
+                  ),
+                ],
               ),
               SizedBox(height: 24),
               Padding(
@@ -168,6 +180,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
+                          height: 60,
                           padding: const EdgeInsets.only(
                             left: 24,
                             top: 16,
@@ -197,10 +210,13 @@ class _HomePageState extends State<HomePage> {
                                     right: 16,
                                     left: 4,
                                   ),
-                                  child: Icon(
-                                    Icons.more_vert,
-                                    size: 20,
-                                    color: Colors.grey[400],
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: Icon(
+                                      Icons.more_vert,
+                                      size: 20,
+                                      color: Colors.grey[400],
+                                    ),
                                   ),
                                 ),
                                 itemBuilder: (context) {
@@ -232,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                     SizedBox(height: 50),
                                                     Text(
-                                                      'بإسم : ${response.name}',
+                                                      'الاسم : ${response.name}',
                                                     ),
                                                     Spacer(),
                                                     Row(

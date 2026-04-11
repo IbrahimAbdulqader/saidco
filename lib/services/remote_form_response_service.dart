@@ -6,13 +6,19 @@ class RemoteFormResponseService extends FormResponseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Stream<List<FormResponse>> getFormResponse() {
+  Stream<List<FormResponse>> getFormResponse(String? filterStatus) {
     try {
-      return _firestore.collection('form_submissions').snapshots().map((
-        snapshot,
-      ) {
+      Query firestoreQuery = _firestore.collection('form_submissions');
+
+      if (filterStatus == 'notContacted') {
+        firestoreQuery = firestoreQuery.where('isContacted', isEqualTo: false);
+      } else if (filterStatus == 'isContacted') {
+        firestoreQuery = firestoreQuery.where('isContacted', isEqualTo: true);
+      }
+
+      return firestoreQuery.snapshots().map((snapshot) {
         List<FormResponse> responses = snapshot.docs.map((doc) {
-          return FormResponse.fromJson(doc.data());
+          return FormResponse.fromJson(doc.data() as Map<String, dynamic>);
         }).toList();
 
         responses.sort((a, b) => b.submissionDate.compareTo(a.submissionDate));
