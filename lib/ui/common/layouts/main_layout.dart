@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:saidco/ui/app/responses_page/responses_page.dart';
 import 'package:saidco/ui/common/custom_app_bar.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key, required this.body});
-
-  final Widget body;
+  const MainLayout({super.key});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int selectedIndex = 0;
-  List<String> titles = [
+  final List<String> _titles = [
     'تسجيلات العملاء',
-    'ادارة التسكينات',
-    'ادارة الحسابات',
+    'إدارة التسكينات',
+    'إدارة الحسابات',
   ];
+
+  final List<Widget> _pages = [
+    ResponsesPage(),
+    Center(child: Text('صفحة إدارة التسكينات')),
+    Center(child: Text('صفحة إدارة الحسابات')),
+  ];
+
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,7 @@ class _MainLayoutState extends State<MainLayout> {
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
-        child: CustomAppBar(title: titles[selectedIndex]),
+        child: CustomAppBar(title: _titles[selectedIndex]),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -79,13 +85,13 @@ class _MainLayoutState extends State<MainLayout> {
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     icon: Icon(Icons.hotel_outlined),
                     selectedIcon: Icon(Icons.hotel),
-                    label: Text('ادارة التسكينات'),
+                    label: Text('إدارة التسكينات'),
                   ),
                   NavigationRailDestination(
                     padding: EdgeInsets.only(top: 12),
                     icon: Icon(Icons.account_balance_outlined),
                     selectedIcon: Icon(Icons.account_balance),
-                    label: Text('ادارة الحسابات'),
+                    label: Text('إدارة الحسابات'),
                   ),
                 ],
                 selectedIndex: selectedIndex,
@@ -108,7 +114,7 @@ class _MainLayoutState extends State<MainLayout> {
                   child: Column(
                     children: [
                       SizedBox(height: 100),
-                      Expanded(child: widget.body),
+                      Expanded(child: _pages[selectedIndex]),
                     ],
                   ),
                 ),

@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saidco/ui/common/layouts/main_layout.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-import 'package:saidco/ui/app/home_page/home_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
@@ -24,11 +24,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('en'), Locale('ar')],
-      theme: ThemeData(
-        textTheme: GoogleFonts.alexandriaTextTheme(),
-        // colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const HomePage(),
+      theme: ThemeData(textTheme: GoogleFonts.alexandriaTextTheme()),
+      home: MainLayout(),
     );
   }
 }

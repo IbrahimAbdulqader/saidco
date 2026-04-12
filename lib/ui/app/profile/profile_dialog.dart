@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:saidco/models/form_response/form_response.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/custom_rich_text.dart';
+import 'package:saidco/ui/common/custom_toast.dart';
 
 class ProfileDialog extends StatelessWidget {
   const ProfileDialog({super.key, required this.formResponse});
@@ -52,9 +54,28 @@ class ProfileDialog extends StatelessWidget {
                       ),
                     ],
                   ),
-                  CustomRichText(
-                    title: 'رقم الهاتف',
-                    subtitle: formResponse.phoneNumber,
+                  Row(
+                    children: [
+                      CustomRichText(
+                        title: 'رقم الهاتف',
+                        subtitle: formResponse.phoneNumber,
+                      ),
+                      SizedBox(width: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 35),
+                        child: IconButton(
+                          onPressed: () {
+                            Clipboard.setData(
+                              ClipboardData(text: formResponse.phoneNumber),
+                            );
+
+                            showCustomToast(context, 'تم النسخ بنجاح');
+                          },
+
+                          icon: Icon(Icons.copy, size: 16),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
