@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:saidco/ui/app/responses_page/responses_page.dart';
+import 'package:saidco/features/form_response/presentation/pages/form_responses_page.dart';
 import 'package:saidco/ui/common/custom_app_bar.dart';
 
 class MainLayout extends StatefulWidget {

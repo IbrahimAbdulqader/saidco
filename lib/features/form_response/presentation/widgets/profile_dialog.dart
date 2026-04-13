@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:saidco/models/form_response/form_response.dart';
+import 'package:saidco/models/form_response/form_response_model.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/custom_rich_text.dart';
-import 'package:saidco/ui/common/custom_toast.dart';
+import 'package:saidco/core/utils/custom_toast.dart';
 
 class ProfileDialog extends StatelessWidget {
   const ProfileDialog({super.key, required this.formResponse});

@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:saidco/enums/filtering_enums.dart';
+import 'package:saidco/core/enums/filtering_enums.dart';
 import 'package:saidco/services/remote_form_response_service.dart';
+import 'package:saidco/features/form_response/presentation/widgets/filter_toggle_buttons.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/data_cell.dart';
 import 'package:saidco/ui/common/header_cell.dart';
-import 'package:saidco/ui/app/profile/profile_dialog.dart';
+import 'package:saidco/features/form_response/presentation/widgets/profile_dialog.dart';
+import 'package:saidco/core/utils/custom_toast.dart';
 
 class ResponsesPage extends StatefulWidget {
   const ResponsesPage({super.key});
@@ -69,24 +71,18 @@ class _ResponsesPageState extends State<ResponsesPage> {
 
         return Column(
           children: [
-            ToggleButtons(
-              constraints: BoxConstraints(maxHeight: 35, minHeight: 35),
-              borderRadius: BorderRadius.circular(12),
-              borderWidth: 2,
-              borderColor: Colors.grey[500],
-              selectedBorderColor: Colors.deepPurple.withValues(alpha: 0.8),
-              selectedColor: Colors.deepPurple.withValues(alpha: 0.8),
-              fillColor: Colors.deepPurple.withValues(alpha: 0.2),
-              textStyle: TextStyle(
-                color: Colors.grey[500],
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+            FilterToggleButtons(
               onPressed: (index) {
                 setState(() {
-                  if (index == 0) filterStatus = FilterStatus.all;
-                  if (index == 1) filterStatus = FilterStatus.notContacted;
-                  if (index == 2) filterStatus = FilterStatus.isContacted;
+                  if (index == 0) {
+                    filterStatus = FilterStatus.all;
+                  }
+                  if (index == 1) {
+                    filterStatus = FilterStatus.notContacted;
+                  }
+                  if (index == 2) {
+                    filterStatus = FilterStatus.isContacted;
+                  }
                   updateStream();
                 });
               },
@@ -94,14 +90,6 @@ class _ResponsesPageState extends State<ResponsesPage> {
                 filterStatus == FilterStatus.all,
                 filterStatus == FilterStatus.notContacted,
                 filterStatus == FilterStatus.isContacted,
-              ],
-              children: [
-                SizedBox(width: 120, child: Center(child: Text('الكل'))),
-                SizedBox(
-                  width: 120,
-                  child: Center(child: Text('لم يتم التواصل')),
-                ),
-                SizedBox(width: 120, child: Center(child: Text('تم التواصل'))),
               ],
             ),
             SizedBox(height: 24),
@@ -275,6 +263,10 @@ class _ResponsesPageState extends State<ResponsesPage> {
                                                               .delete();
                                                           Navigator.pop(
                                                             context,
+                                                          );
+                                                          showCustomToast(
+                                                            context,
+                                                            'تم حذف التسجيل بنجاح',
                                                           );
                                                         },
                                                       ),

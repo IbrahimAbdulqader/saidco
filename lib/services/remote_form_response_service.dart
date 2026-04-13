@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:saidco/abstract/form_response_service.dart';
-import 'package:saidco/models/form_response/form_response.dart';
+import 'package:saidco/core/abstract/form_response_service.dart';
+import 'package:saidco/models/form_response/form_response_model.dart';
 
 class RemoteFormResponseService extends FormResponseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

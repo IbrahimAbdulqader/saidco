@@ -21,6 +21,6 @@ void showCustomToast(BuildContext context, String message) {
   fToast.showToast(
     child: toast,
     gravity: ToastGravity.BOTTOM_RIGHT,
-    toastDuration: const Duration(seconds: 2),
+    toastDuration: const Duration(seconds: 3),
   );
 }
