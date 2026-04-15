@@ -8,14 +8,14 @@ abstract class FormRemoteDataSource {
 }
 
 class FormRemoteDataSourceImpl implements FormRemoteDataSource {
-  FormRemoteDataSourceImpl({FirebaseFirestore? firebase})
-    : _firebase = firebase ?? FirebaseFirestore.instance;
+  FormRemoteDataSourceImpl({FirebaseFirestore? firestore})
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  final FirebaseFirestore _firebase;
+  final FirebaseFirestore _firestore;
 
   @override
   Stream<List<FormResponseModel>> getFormResponses(String? filterStatus) {
-    Query firestoreQuery = _firebase.collection('form_submissions');
+    Query firestoreQuery = _firestore.collection('form_submissions');
 
     if (filterStatus == 'notContacted') {
       firestoreQuery = firestoreQuery.where('isContacted', isEqualTo: false);
@@ -46,7 +46,7 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
   @override
   Future<void> deleteFormResponse(String formId) async {
     try {
-      await _firebase.collection('form_submissions').doc(formId).delete();
+      await _firestore.collection('form_submissions').doc(formId).delete();
     } on FirebaseException catch (e) {
       throw ServerException('Failed to delete form response: ${e.message}');
     } catch (e) {

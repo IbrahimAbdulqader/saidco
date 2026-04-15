@@ -5,6 +5,7 @@ class FormResponse {
   final String name;
   final String phoneNumber;
   final String programLevel;
+  final String expectedCost;
   final String travelDate;
   final String dayCount;
   final String roomType;
@@ -19,6 +20,7 @@ class FormResponse {
     required this.name,
     required this.phoneNumber,
     required this.programLevel,
+    required this.expectedCost,
     required this.travelDate,
     required this.dayCount,
     required this.roomType,
@@ -32,25 +34,28 @@ class FormResponse {
   factory FormResponse.fromJson(Map<String, dynamic> jsonData) {
     return FormResponse(
       formId: jsonData['responseId'] ?? 'Form ID not found',
-      name: jsonData['اسم العميل'] ?? 'Name not found',
-      phoneNumber: jsonData['رقم هاتف العميل'] ?? 'Phone number not found',
-      programLevel: jsonData['حدد مستوى البرنامج'] ?? 'Program level not found',
+      name: jsonData['اسم العميل'] ?? 'اسم العميل غير موجود',
+      phoneNumber: jsonData['رقم هاتف العميل'] ?? 'ررقم الهاتف غير موجود',
+      programLevel:
+          jsonData['حدد مستوى البرنامج'] ?? 'مستوى البرنامج غير موجود',
+      expectedCost:
+          jsonData['حدد السعر المتوقع للبرنامج'] ?? 'السعر المتوقع غير موجود',
       travelDate: jsonData['حدد فترة الحجز'] == null
-          ? 'Travel date not found'
+          ? 'تاريخ السفر غير موجود'
           : jsonData['حدد فترة الحجز'].toString(),
       dayCount:
-          jsonData['حدد عدد أيام الرحلة المناسبة'] ?? 'Day count not found',
+          jsonData['حدد عدد أيام الرحلة المناسبة'] ?? 'عدد الأيام غير موجود',
       roomType:
-          jsonData['حدد نوع غرف الفنادق المناسبة'] ?? 'Room type not found',
+          jsonData['حدد نوع غرف الفنادق المناسبة'] ?? 'نوع الغرفة غير موجود',
       hotelPreferences:
           jsonData['(اختياري) هل لديك تفضيلات من حيث الفنادق السكنية ؟'] ??
-          'Hotel preferences not found',
+          'تفضيلات الفنادق غير موجودة',
       flightPreferences:
           jsonData['(اختياري) هل لديك تفضيلات من حيث شركة الطيران ؟'] ??
-          'Flight preferences not found',
+          'تفضيلات الطيران غير موجودة',
       additionalInfo:
           jsonData['(اختياري) هل لديك أي ملاحظات اخرى ؟'] ??
-          'Additional info not found',
+          'الملاحظات غير موجودة',
       submissionDate: jsonData['submissionDate'] ?? Timestamp.now(),
       isContacted: jsonData['isContacted'] ?? false,
     );

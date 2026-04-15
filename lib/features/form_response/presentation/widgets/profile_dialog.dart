@@ -98,6 +98,12 @@ class ProfileDialog extends StatelessWidget {
                           subtitle: formResponse.programLevel,
                         ),
                         CustomRichText(
+                          title: 'السعر المتوقع',
+                          subtitle: formResponse.expectedCost.trim() == ''
+                              ? 'لا يوجد'
+                              : formResponse.expectedCost,
+                        ),
+                        CustomRichText(
                           title: 'تاريخ السفر',
                           subtitle: formResponse.travelDate,
                         ),
@@ -111,19 +117,19 @@ class ProfileDialog extends StatelessWidget {
                         ),
                         CustomRichText(
                           title: 'ملاحظات الفنادق السكنية',
-                          subtitle: formResponse.hotelPreferences == ''
+                          subtitle: formResponse.hotelPreferences.trim() == ''
                               ? 'لا يوجد'
                               : formResponse.hotelPreferences,
                         ),
                         CustomRichText(
                           title: 'ملاحظات شركة الطيران',
-                          subtitle: formResponse.flightPreferences == ''
+                          subtitle: formResponse.flightPreferences.trim() == ''
                               ? 'لا يوجد'
                               : formResponse.flightPreferences,
                         ),
                         CustomRichText(
                           title: 'الملاحظات الاضافية',
-                          subtitle: formResponse.additionalInfo == ''
+                          subtitle: formResponse.additionalInfo.trim() == ''
                               ? 'لا يوجد'
                               : formResponse.additionalInfo,
                         ),

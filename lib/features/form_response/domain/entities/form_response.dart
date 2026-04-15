@@ -6,6 +6,7 @@ class FormResponse extends Equatable {
   final String name;
   final String phoneNumber;
   final String programLevel;
+  final String expectedCost;
   final String travelDate;
   final String dayCount;
   final String roomType;
@@ -20,6 +21,7 @@ class FormResponse extends Equatable {
     required this.name,
     required this.phoneNumber,
     required this.programLevel,
+    required this.expectedCost,
     required this.travelDate,
     required this.dayCount,
     required this.roomType,
@@ -36,6 +38,7 @@ class FormResponse extends Equatable {
     name,
     phoneNumber,
     programLevel,
+    expectedCost,
     travelDate,
     dayCount,
     roomType,
