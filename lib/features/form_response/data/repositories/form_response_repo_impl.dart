@@ -1,0 +1,19 @@
+import 'package:saidco/features/form_response/data/datasources/form_remote_datasource.dart';
+import 'package:saidco/features/form_response/domain/entities/form_response.dart';
+import 'package:saidco/features/form_response/domain/repositories/form_response_repo.dart';
+
+class FormResponseRepoImpl implements FormResponseRepo {
+  FormResponseRepoImpl(this._remoteDataSource);
+
+  final FormRemoteDataSource _remoteDataSource;
+
+  @override
+  Stream<List<FormResponse>> getFormResponse(String? filterStatus) {
+    return _remoteDataSource.getFormResponses(filterStatus);
+  }
+
+  @override
+  Future<void> deleteFormResponse(String formId) {
+    return _remoteDataSource.deleteFormResponse(formId);
+  }
+}

@@ -4,7 +4,7 @@ import 'package:saidco/features/form_response/domain/repositories/form_response_
 class GetFormResponses {
   GetFormResponses(this.repository);
 
-  final FormResponseRepository repository;
+  final FormResponseRepo repository;
 
   Stream<List<FormResponse>> call(String? filterStatus) {
     return repository.getFormResponse(filterStatus);
