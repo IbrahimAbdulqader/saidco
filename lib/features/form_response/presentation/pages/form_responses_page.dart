@@ -30,6 +30,7 @@ class _ResponsesPageState extends State<ResponsesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final myCubit = context.read<FormResponseCubit>();
     return BlocBuilder<FormResponseCubit, FormResponseState>(
       builder: (context, state) {
         if (state is FormResponseLoading) {
@@ -199,77 +200,82 @@ class _ResponsesPageState extends State<ResponsesPage> {
                                 itemBuilder: (context) {
                                   return [
                                     PopupMenuItem(
-                                      onTap: () {
+                                      onTap: () async {
+                                        await Future.delayed(
+                                          Duration(milliseconds: 50),
+                                        );
+                                        if (!context.mounted) return;
                                         showDialog(
                                           context: context,
-                                          builder: (context) => AlertDialog(
-                                            content: SizedBox(
-                                              height: 200,
-                                              width: 350,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                  8.0,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        'هل أنت متأكد من حذف هذا التسجيل؟',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                          builder: (context) => BlocProvider.value(
+                                            value: myCubit,
+                                            child: AlertDialog(
+                                              content: SizedBox(
+                                                height: 200,
+                                                width: 350,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    8.0,
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                          'هل أنت متأكد من حذف هذا التسجيل؟',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(height: 50),
-                                                    Text(
-                                                      'الاسم : ${response.name}',
-                                                    ),
-                                                    Spacer(),
-                                                    Row(
-                                                      children: [
-                                                        CustomButton(
-                                                          width: 130,
-                                                          text: 'إغلاق',
-                                                          onPressed: () =>
+                                                      SizedBox(height: 50),
+                                                      Text(
+                                                        'الاسم : ${response.name}',
+                                                      ),
+                                                      Spacer(),
+                                                      Row(
+                                                        children: [
+                                                          CustomButton(
+                                                            width: 130,
+                                                            text: 'إغلاق',
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                  context,
+                                                                ),
+                                                          ),
+                                                          Spacer(),
+                                                          CustomButton(
+                                                            width: 140,
+                                                            text: 'حذف التسجيل',
+                                                            backgroundColor:
+                                                                Colors.redAccent
+                                                                    .withValues(
+                                                                      alpha:
+                                                                          0.35,
+                                                                    ),
+                                                            foregroundColor:
+                                                                Colors.red[700],
+                                                            onPressed: () {
+                                                              myCubit.deleteFormResponse(
+                                                                response
+                                                                    .responseId,
+                                                              );
                                                               Navigator.pop(
                                                                 context,
-                                                              ),
-                                                        ),
-                                                        Spacer(),
-                                                        CustomButton(
-                                                          width: 140,
-                                                          text: 'حذف التسجيل',
-                                                          backgroundColor:
-                                                              Colors.redAccent
-                                                                  .withValues(
-                                                                    alpha: 0.35,
-                                                                  ),
-                                                          foregroundColor:
-                                                              Colors.red[700],
-                                                          onPressed: () {
-                                                            context
-                                                                .read<
-                                                                  FormResponseCubit
-                                                                >()
-                                                                .deleteFormResponse(
-                                                                  response
-                                                                      .responseId,
-                                                                );
-                                                            Navigator.pop(
-                                                              context,
-                                                            );
-                                                            showCustomToast(
-                                                              context,
-                                                              'تم حذف التسجيل بنجاح',
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                              );
+                                                              showCustomToast(
+                                                                context,
+                                                                'تم حذف التسجيل بنجاح',
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),

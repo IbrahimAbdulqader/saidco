@@ -91,8 +91,8 @@ class _MainLayoutState extends State<MainLayout> {
                   ),
                   NavigationRailDestination(
                     padding: EdgeInsets.only(bottom: 12),
-                    icon: Icon(Icons.table_chart_outlined),
-                    selectedIcon: Icon(Icons.table_chart),
+                    icon: Icon(Icons.group_outlined),
+                    selectedIcon: Icon(Icons.group),
                     label: Text('العملاء المحتملين'),
                   ),
                   NavigationRailDestination(
