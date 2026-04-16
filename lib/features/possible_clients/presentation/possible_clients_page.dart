@@ -1,32 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:saidco/core/enums/filtering_enums.dart';
+import 'package:saidco/core/utils/custom_toast.dart';
 import 'package:saidco/features/form_response/presentation/cubit/form_response_cubit.dart';
 import 'package:saidco/features/form_response/presentation/cubit/form_response_state.dart';
-import 'package:saidco/features/form_response/presentation/widgets/filter_toggle_buttons.dart';
+import 'package:saidco/features/form_response/presentation/widgets/profile_dialog.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/data_cell.dart';
 import 'package:saidco/ui/common/header_cell.dart';
-import 'package:saidco/features/form_response/presentation/widgets/profile_dialog.dart';
-import 'package:saidco/core/utils/custom_toast.dart';
 
-class ResponsesPage extends StatefulWidget {
-  const ResponsesPage({super.key});
+class PossibleClientsPage extends StatefulWidget {
+  const PossibleClientsPage({super.key});
 
   @override
-  State<ResponsesPage> createState() => _ResponsesPageState();
+  State<PossibleClientsPage> createState() => _PossibleClientsPageState();
 }
 
-class _ResponsesPageState extends State<ResponsesPage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<FormResponseCubit>().fetchFormResponses();
-  }
-
+class _PossibleClientsPageState extends State<PossibleClientsPage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FilterStatus filterStatus = FilterStatus.all;
 
   @override
   Widget build(BuildContext context) {
@@ -66,26 +57,6 @@ class _ResponsesPageState extends State<ResponsesPage> {
 
           return Column(
             children: [
-              FilterToggleButtons(
-                onPressed: (index) {
-                  setState(() {
-                    if (index == 0) {
-                      filterStatus = FilterStatus.all;
-                      context.read<FormResponseCubit>().fetchFormResponses();
-                    }
-                    if (index == 1) {
-                      filterStatus = FilterStatus.notContacted;
-                      context.read<FormResponseCubit>().fetchFormResponses(
-                        filterStatus: FilterStatus.notContacted.name,
-                      );
-                    }
-                  });
-                },
-                isSelected: [
-                  filterStatus == FilterStatus.all,
-                  filterStatus == FilterStatus.notContacted,
-                ],
-              ),
               SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -250,17 +221,26 @@ class _ResponsesPageState extends State<ResponsesPage> {
                                                           foregroundColor:
                                                               Colors.red[700],
                                                           onPressed: () {
-                                                            context
-                                                                .read<
-                                                                  FormResponseCubit
-                                                                >()
-                                                                .deleteFormResponse(
+                                                            firestore
+                                                                .collection(
+                                                                  'form_submissions',
+                                                                )
+                                                                .doc(
                                                                   response
                                                                       .responseId,
-                                                                );
+                                                                )
+                                                                .delete();
                                                             Navigator.pop(
                                                               context,
                                                             );
+                                                            // context
+                                                            //     .read<
+                                                            //       FormResponseCubit
+                                                            //     >()
+                                                            //     .deleteFormResponse(
+                                                            //       response
+                                                            //           .responseId,
+                                                            //     );
                                                             showCustomToast(
                                                               context,
                                                               'تم حذف التسجيل بنجاح',

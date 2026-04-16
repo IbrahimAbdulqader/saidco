@@ -3,7 +3,7 @@ import 'package:saidco/features/form_response/domain/entities/form_response.dart
 
 class FormResponseModel extends FormResponse {
   const FormResponseModel({
-    required super.formId,
+    required super.responseId,
     required super.name,
     required super.phoneNumber,
     required super.programLevel,
@@ -20,7 +20,7 @@ class FormResponseModel extends FormResponse {
 
   factory FormResponseModel.fromJson(Map<String, dynamic> jsonData) {
     return FormResponseModel(
-      formId: jsonData['responseId'] ?? 'Form ID not found',
+      responseId: jsonData['responseId'] ?? 'Form ID not found',
       name: jsonData['اسم العميل'] ?? 'اسم العميل غير موجود',
       phoneNumber: jsonData['رقم هاتف العميل'] ?? 'ررقم الهاتف غير موجود',
       programLevel:

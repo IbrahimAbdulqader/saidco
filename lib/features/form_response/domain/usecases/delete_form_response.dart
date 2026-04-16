@@ -5,7 +5,7 @@ class DeleteFormResponse {
 
   final FormResponseRepo repository;
 
-  Future<void> call(String formId) async {
-    return await repository.deleteFormResponse(formId);
+  Future<void> call(String responseId) async {
+    return await repository.deleteFormResponse(responseId);
   }
 }

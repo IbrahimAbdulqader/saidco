@@ -35,7 +35,6 @@ class _FilterToggleButtonsState extends State<FilterToggleButtons> {
       children: [
         SizedBox(width: 120, child: Center(child: Text('الكل'))),
         SizedBox(width: 120, child: Center(child: Text('لم يتم التواصل'))),
-        SizedBox(width: 120, child: Center(child: Text('تم التواصل'))),
       ],
     );
   }

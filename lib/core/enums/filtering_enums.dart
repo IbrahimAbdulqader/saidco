@@ -1,1 +1,1 @@
-enum FilterStatus { all, isContacted, notContacted }
+enum FilterStatus { all, notContacted }

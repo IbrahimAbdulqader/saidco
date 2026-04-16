@@ -13,7 +13,7 @@ class FormResponseRepoImpl implements FormResponseRepo {
   }
 
   @override
-  Future<void> deleteFormResponse(String formId) {
-    return _remoteDataSource.deleteFormResponse(formId);
+  Future<void> deleteFormResponse(String responseId) {
+    return _remoteDataSource.deleteFormResponse(responseId);
   }
 }

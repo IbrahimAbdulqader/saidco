@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class FormResponse extends Equatable {
-  final String formId;
+  final String responseId;
   final String name;
   final String phoneNumber;
   final String programLevel;
@@ -17,7 +17,7 @@ class FormResponse extends Equatable {
   final bool isContacted;
 
   const FormResponse({
-    required this.formId,
+    required this.responseId,
     required this.name,
     required this.phoneNumber,
     required this.programLevel,
@@ -34,7 +34,7 @@ class FormResponse extends Equatable {
 
   @override
   List<Object?> get props => [
-    formId,
+    responseId,
     name,
     phoneNumber,
     programLevel,

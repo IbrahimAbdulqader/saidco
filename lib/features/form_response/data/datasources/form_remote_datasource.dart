@@ -4,7 +4,7 @@ import 'package:saidco/features/form_response/data/models/form_response_model.da
 
 abstract class FormRemoteDataSource {
   Stream<List<FormResponseModel>> getFormResponses(String? filterStatus);
-  Future<void> deleteFormResponse(String formId);
+  Future<void> deleteFormResponse(String responseId);
 }
 
 class FormRemoteDataSourceImpl implements FormRemoteDataSource {
@@ -44,9 +44,9 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
   }
 
   @override
-  Future<void> deleteFormResponse(String formId) async {
+  Future<void> deleteFormResponse(String responseId) async {
     try {
-      await _firestore.collection('form_submissions').doc(formId).delete();
+      await _firestore.collection('form_submissions').doc(responseId).delete();
     } on FirebaseException catch (e) {
       throw ServerException('Failed to delete form response: ${e.message}');
     } catch (e) {

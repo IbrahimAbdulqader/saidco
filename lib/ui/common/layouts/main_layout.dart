@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:saidco/core/di/injection_container.dart';
+import 'package:saidco/features/form_response/presentation/cubit/form_response_cubit.dart';
 import 'package:saidco/features/form_response/presentation/pages/form_responses_page.dart';
 import 'package:saidco/ui/common/custom_app_bar.dart';
 
@@ -12,12 +15,17 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   final List<String> _titles = [
     'تسجيلات العملاء',
+    'العملاء المحتملين',
     'إدارة التسكينات',
     'إدارة الحسابات',
   ];
 
   final List<Widget> _pages = [
-    ResponsesPage(),
+    BlocProvider(
+      create: (context) => sl<FormResponseCubit>(),
+      child: ResponsesPage(),
+    ),
+    Center(child: Text('صفحة العملاء المحتملين')),
     Center(child: Text('صفحة إدارة التسكينات')),
     Center(child: Text('صفحة إدارة الحسابات')),
   ];
@@ -80,6 +88,12 @@ class _MainLayoutState extends State<MainLayout> {
                     icon: Icon(Icons.table_chart_outlined),
                     selectedIcon: Icon(Icons.table_chart),
                     label: Text('تسجيلات العملاء'),
+                  ),
+                  NavigationRailDestination(
+                    padding: EdgeInsets.only(bottom: 12),
+                    icon: Icon(Icons.table_chart_outlined),
+                    selectedIcon: Icon(Icons.table_chart),
+                    label: Text('العملاء المحتملين'),
                   ),
                   NavigationRailDestination(
                     padding: EdgeInsets.symmetric(horizontal: 12),

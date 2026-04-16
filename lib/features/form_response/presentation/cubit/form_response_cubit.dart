@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:saidco/features/form_response/domain/usecases/delete_form_response.dart';
 import 'package:saidco/features/form_response/domain/usecases/get_form_responses.dart';
@@ -18,7 +17,7 @@ class FormResponseCubit extends Cubit<FormResponseState> {
        _deleteFormResponse = deleteFormResponse,
        super(FormResponseLoading());
 
-  void fetchForms({String? filterStatus}) {
+  void fetchFormResponses({String? filterStatus}) {
     emit(FormResponseLoading());
 
     _formResponseSubscription?.cancel();
