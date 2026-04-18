@@ -1,11 +1,11 @@
 import 'package:saidco/features/possible_clients/domain/entities/possible_clients.dart';
 
 abstract class PossibleClientsRepo {
-  Future<void> addPossibleClient(PossibleClients possibleClient);
+  Future<void> addPossibleClient(PossibleClient possibleClient);
 
-  Stream<List<PossibleClients>> getPossibleClients();
+  Stream<List<PossibleClient>> getPossibleClients();
 
-  Future<void> updatePossibleClient(PossibleClients possibleClient);
+  Future<void> updatePossibleClient(PossibleClient possibleClient);
 
   Future<void> deletePossibleClient(String clientId);
 }

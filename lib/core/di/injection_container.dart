@@ -5,6 +5,7 @@ import 'package:saidco/features/form_response/data/repositories/form_response_re
 import 'package:saidco/features/form_response/domain/repositories/form_response_repo.dart';
 import 'package:saidco/features/form_response/domain/usecases/delete_form_response.dart';
 import 'package:saidco/features/form_response/domain/usecases/get_form_responses.dart';
+import 'package:saidco/features/form_response/domain/usecases/transfer_form_response.dart';
 import 'package:saidco/features/form_response/presentation/cubit/form_response_cubit.dart';
 
 final sl = GetIt.instance;
@@ -13,11 +14,16 @@ Future<void> init() async {
   //Feature - Form Response
 
   sl.registerFactory(
-    () => FormResponseCubit(getFormResponses: sl(), deleteFormResponse: sl()),
+    () => FormResponseCubit(
+      getFormResponses: sl(),
+      deleteFormResponse: sl(),
+      transferFormResponse: sl(),
+    ),
   );
 
   sl.registerLazySingleton(() => GetFormResponses(sl()));
   sl.registerLazySingleton(() => DeleteFormResponse(sl()));
+  sl.registerLazySingleton(() => TransferFormResponse(sl()));
 
   sl.registerLazySingleton<FormResponseRepo>(() => FormResponseRepoImpl(sl()));
 

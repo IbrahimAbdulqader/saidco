@@ -22,7 +22,7 @@ class _ResponsesPageState extends State<ResponsesPage> {
   @override
   void initState() {
     super.initState();
-    context.read<FormResponseCubit>().fetchFormResponses();
+    context.read<FormResponseCubit>().getFormResponses();
   }
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -30,7 +30,7 @@ class _ResponsesPageState extends State<ResponsesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final myCubit = context.read<FormResponseCubit>();
+    final formResponseCubit = context.read<FormResponseCubit>();
     return BlocBuilder<FormResponseCubit, FormResponseState>(
       builder: (context, state) {
         if (state is FormResponseLoading) {
@@ -72,11 +72,11 @@ class _ResponsesPageState extends State<ResponsesPage> {
                   setState(() {
                     if (index == 0) {
                       filterStatus = FilterStatus.all;
-                      context.read<FormResponseCubit>().fetchFormResponses();
+                      context.read<FormResponseCubit>().getFormResponses();
                     }
                     if (index == 1) {
                       filterStatus = FilterStatus.notContacted;
-                      context.read<FormResponseCubit>().fetchFormResponses(
+                      context.read<FormResponseCubit>().getFormResponses(
                         filterStatus: FilterStatus.notContacted.name,
                       );
                     }
@@ -199,6 +199,18 @@ class _ResponsesPageState extends State<ResponsesPage> {
                                 ),
                                 itemBuilder: (context) {
                                   return [
+                                    if (response.isContacted == true)
+                                      PopupMenuItem(
+                                        onTap: () async {
+                                          await Future.delayed(
+                                            Duration(milliseconds: 50),
+                                          );
+                                          formResponseCubit.transferToPossibleClient(
+                                            response,
+                                          );
+                                        },
+                                        child: Text('تحويل لعميل محتمل'),
+                                      ),
                                     PopupMenuItem(
                                       onTap: () async {
                                         await Future.delayed(
@@ -208,7 +220,7 @@ class _ResponsesPageState extends State<ResponsesPage> {
                                         showDialog(
                                           context: context,
                                           builder: (context) => BlocProvider.value(
-                                            value: myCubit,
+                                            value: formResponseCubit,
                                             child: AlertDialog(
                                               content: SizedBox(
                                                 height: 200,
@@ -259,10 +271,11 @@ class _ResponsesPageState extends State<ResponsesPage> {
                                                             foregroundColor:
                                                                 Colors.red[700],
                                                             onPressed: () {
-                                                              myCubit.deleteFormResponse(
-                                                                response
-                                                                    .responseId,
-                                                              );
+                                                              formResponseCubit
+                                                                  .deleteFormResponse(
+                                                                    response
+                                                                        .responseId,
+                                                                  );
                                                               Navigator.pop(
                                                                 context,
                                                               );

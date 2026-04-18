@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:saidco/core/errors/exceptions.dart';
 import 'package:saidco/features/form_response/data/models/form_response_model.dart';
+import 'package:saidco/features/possible_clients/data/models/possible_clients_model.dart';
+import 'package:saidco/features/possible_clients/domain/entities/possible_clients.dart';
 
 abstract class FormRemoteDataSource {
   Stream<List<FormResponseModel>> getFormResponses(String? filterStatus);
+  Future<void> transferToPossibleClient(PossibleClient possibleClient);
   Future<void> deleteFormResponse(String responseId);
 }
 
@@ -29,7 +32,6 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
           List<FormResponseModel> responses = snapshot.docs.map((doc) {
             return FormResponseModel.fromJson(
               doc.data() as Map<String, dynamic>,
-              //   doc.id
             );
           }).toList();
 
@@ -41,6 +43,38 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
         .handleError((error) {
           throw ServerException('Failed to fetch form responses: $error');
         });
+  }
+
+  @override
+  Future<void> transferToPossibleClient(PossibleClient possibleClient) async {
+    final model = PossibleClientModel(
+      clientId: possibleClient.clientId,
+      name: possibleClient.name,
+      phoneNumber: possibleClient.phoneNumber,
+      programLevel: possibleClient.programLevel,
+      expectedCost: possibleClient.expectedCost,
+      travelDate: possibleClient.travelDate,
+      dayCount: possibleClient.dayCount,
+      roomType: possibleClient.roomType,
+      hotelPreferences: possibleClient.hotelPreferences,
+      flightPreferences: possibleClient.flightPreferences,
+      additionalInfo: possibleClient.additionalInfo,
+      submissionDate: possibleClient.submissionDate,
+    );
+    final data = model.toJson();
+    try {
+      await _firestore
+          .collection('possible_clients')
+          .doc(possibleClient.clientId)
+          .set(data);
+      await deleteFormResponse(possibleClient.clientId);
+    } on FirebaseException catch (e) {
+      throw ServerException('Failed to transfer form response: ${e.message}');
+    } catch (e) {
+      ServerException(
+        'An unexpected error occurred during form response transfer',
+      );
+    }
   }
 
   @override

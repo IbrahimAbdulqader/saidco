@@ -6,7 +6,7 @@ class UpdatePossibleClient {
 
   final PossibleClientsRepo repository;
 
-  Future<void> call(PossibleClients possibleClient) async {
+  Future<void> call(PossibleClient possibleClient) async {
     await repository.updatePossibleClient(possibleClient);
   }
 }

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:saidco/features/possible_clients/domain/entities/possible_clients.dart';
 
-class PossibleClientsModel extends PossibleClients {
-  const PossibleClientsModel({
+class PossibleClientModel extends PossibleClient {
+  const PossibleClientModel({
     required super.clientId,
     required super.name,
     required super.phoneNumber,
@@ -15,11 +15,10 @@ class PossibleClientsModel extends PossibleClients {
     required super.flightPreferences,
     required super.additionalInfo,
     required super.submissionDate,
-    required super.isContacted,
   });
 
-  factory PossibleClientsModel.fromJson(Map<String, dynamic> jsonData) {
-    return PossibleClientsModel(
+  factory PossibleClientModel.fromJson(Map<String, dynamic> jsonData) {
+    return PossibleClientModel(
       clientId: jsonData['clientId'] ?? 'Client ID not found',
       name: jsonData['اسم العميل'] ?? 'اسم العميل غير موجود',
       phoneNumber: jsonData['رقم هاتف العميل'] ?? 'ررقم الهاتف غير موجود',
@@ -44,7 +43,23 @@ class PossibleClientsModel extends PossibleClients {
           jsonData['(اختياري) هل لديك أي ملاحظات اخرى ؟'] ??
           'الملاحظات غير موجودة',
       submissionDate: jsonData['submissionDate'] ?? Timestamp.now(),
-      isContacted: jsonData['isContacted'] ?? false,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'clientId': clientId,
+      'client_name': name,
+      'client_phone': phoneNumber,
+      'program_level': programLevel,
+      'expected_cost': expectedCost,
+      'travel_date': travelDate,
+      'day_count': dayCount,
+      'room_type': roomType,
+      'hotel_preferences': hotelPreferences,
+      'flight_preferences': flightPreferences,
+      'additional_info': additionalInfo,
+      'submission_date': submissionDate,
+    };
   }
 }

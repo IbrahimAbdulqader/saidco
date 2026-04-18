@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
-class PossibleClients extends Equatable {
-  final String responseId;
+class PossibleClient extends Equatable {
+  final String clientId;
   final String name;
   final String phoneNumber;
   final String programLevel;
@@ -14,10 +14,9 @@ class PossibleClients extends Equatable {
   final String flightPreferences;
   final String additionalInfo;
   final Timestamp submissionDate;
-  final bool isContacted;
 
-  const PossibleClients({
-    required this.responseId,
+  const PossibleClient({
+    required this.clientId,
     required this.name,
     required this.phoneNumber,
     required this.programLevel,
@@ -29,12 +28,11 @@ class PossibleClients extends Equatable {
     required this.flightPreferences,
     required this.additionalInfo,
     required this.submissionDate,
-    required this.isContacted,
   });
 
   @override
   List<Object?> get props => [
-    responseId,
+    clientId,
     name,
     phoneNumber,
     programLevel,
@@ -46,6 +44,5 @@ class PossibleClients extends Equatable {
     flightPreferences,
     additionalInfo,
     submissionDate,
-    isContacted,
   ];
 }

@@ -6,7 +6,7 @@ class GetPossibleClients {
 
   final PossibleClientsRepo repository;
 
-  Stream<List<PossibleClients>> call() {
+  Stream<List<PossibleClient>> call() {
     return repository.getPossibleClients();
   }
 }
