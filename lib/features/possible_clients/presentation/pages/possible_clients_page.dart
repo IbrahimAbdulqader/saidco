@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:saidco/core/utils/custom_toast.dart';
-import 'package:saidco/features/form_response/presentation/cubit/form_response_cubit.dart';
-import 'package:saidco/features/form_response/presentation/cubit/form_response_state.dart';
 import 'package:saidco/features/form_response/presentation/widgets/profile_dialog.dart';
+import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_cubit.dart';
+import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_states.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/data_cell.dart';
 import 'package:saidco/ui/common/header_cell.dart';
@@ -20,13 +20,19 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
+  void initState() {
+    super.initState();
+    context.read<PossibleClientsCubit>().getPossibleClients();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FormResponseCubit, FormResponseState>(
+    return BlocBuilder<PossibleClientsCubit, PossibleClientsState>(
       builder: (context, state) {
-        if (state is FormResponseLoading) {
+        if (state is PossibleClientsLoading) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (state is FormResponseError) {
+        if (state is PossibleClientsError) {
           return Center(
             child: Text(
               'حدث خطأ أثناء تحميل البيانات: ${state.message}',
@@ -40,10 +46,10 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
           );
         }
 
-        if (state is FormResponseLoaded) {
-          final responses = state.responses;
+        if (state is PossibleClientsLoaded) {
+          final possibleClients = state.possibleClients;
 
-          if (responses.isEmpty) {
+          if (possibleClients.isEmpty) {
             return const Center(
               child: Padding(
                 padding: EdgeInsets.only(bottom: 75),
@@ -90,11 +96,7 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                           text: 'نوع الغرفة',
                           flex: 2,
                         ),
-                        HeaderCell(
-                          icon: Icons.forum,
-                          text: 'حالة التواصل',
-                          flex: 2,
-                        ),
+
                         SizedBox(width: 26),
                       ],
                     ),
@@ -106,11 +108,11 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
               Expanded(
                 child: ListView.separated(
                   padding: EdgeInsets.zero,
-                  itemCount: responses.length,
+                  itemCount: possibleClients.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 12),
                   itemBuilder: (context, index) {
-                    final response = responses[index];
+                    final possibleClient = possibleClients[index];
 
                     return Material(
                       color: Colors.white70,
@@ -122,8 +124,20 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                         onTap: () {
                           showDialog(
                             context: context,
-                            builder: (context) =>
-                                ProfileDialog(formResponse: response),
+                            builder: (context) => ProfileDialog(
+                              id: possibleClient.clientId,
+                              name: possibleClient.name,
+                              phoneNumber: possibleClient.phoneNumber,
+                              programLevel: possibleClient.programLevel,
+                              expectedCost: possibleClient.expectedCost,
+                              travelDate: possibleClient.travelDate,
+                              dayCount: possibleClient.dayCount,
+                              roomType: possibleClient.roomType,
+                              hotelPreferences: possibleClient.hotelPreferences,
+                              flightPreferences:
+                                  possibleClient.flightPreferences,
+                              additionalInfo: possibleClient.additionalInfo,
+                            ),
                           );
                         },
                         borderRadius: BorderRadius.circular(12),
@@ -196,7 +210,7 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                                     ),
                                                     SizedBox(height: 50),
                                                     Text(
-                                                      'الاسم : ${response.name}',
+                                                      'الاسم : ${possibleClient.name}',
                                                     ),
                                                     Spacer(),
                                                     Row(
@@ -221,26 +235,17 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                                           foregroundColor:
                                                               Colors.red[700],
                                                           onPressed: () {
-                                                            firestore
-                                                                .collection(
-                                                                  'form_submissions',
-                                                                )
-                                                                .doc(
-                                                                  response
-                                                                      .responseId,
-                                                                )
-                                                                .delete();
+                                                            context
+                                                                .read<
+                                                                  PossibleClientsCubit
+                                                                >()
+                                                                .deletePossibleClient(
+                                                                  possibleClient
+                                                                      .clientId,
+                                                                );
                                                             Navigator.pop(
                                                               context,
                                                             );
-                                                            // context
-                                                            //     .read<
-                                                            //       FormResponseCubit
-                                                            //     >()
-                                                            //     .deleteFormResponse(
-                                                            //       response
-                                                            //           .responseId,
-                                                            //     );
                                                             showCustomToast(
                                                               context,
                                                               'تم حذف التسجيل بنجاح',
@@ -265,29 +270,30 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                 },
                               ),
                               TextCell(
-                                text: response.name,
+                                text: possibleClient.name,
                                 flex: 3,
                                 isBold: true,
                               ),
-                              TextCell(text: response.phoneNumber, flex: 2),
-                              TextCell(text: response.programLevel, flex: 2),
-                              TextCell(text: response.travelDate, flex: 2),
-                              TextCell(text: response.dayCount, flex: 2),
                               TextCell(
-                                text: response.roomType == 'ثلاثي'
+                                text: possibleClient.phoneNumber,
+                                flex: 2,
+                              ),
+                              TextCell(
+                                text: possibleClient.programLevel,
+                                flex: 2,
+                              ),
+                              TextCell(
+                                text: possibleClient.travelDate,
+                                flex: 2,
+                              ),
+                              TextCell(text: possibleClient.dayCount, flex: 2),
+                              TextCell(
+                                text: possibleClient.roomType == 'ثلاثي'
                                     ? 'ثـــلاثي'
-                                    : response.roomType,
+                                    : possibleClient.roomType,
                                 flex: 2,
                               ),
-                              TextCell(
-                                text: response.isContacted
-                                    ? 'تم التواصل'
-                                    : 'لم يتم التواصل',
-                                flex: 2,
-                                color: response.isContacted
-                                    ? Colors.green
-                                    : Colors.red,
-                              ),
+
                               Icon(
                                 Icons.arrow_forward_ios,
                                 size: 16,

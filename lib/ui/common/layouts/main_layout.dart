@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:saidco/core/di/injection_container.dart';
 import 'package:saidco/features/form_response/presentation/cubit/form_response_cubit.dart';
 import 'package:saidco/features/form_response/presentation/pages/form_responses_page.dart';
+import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_cubit.dart';
+import 'package:saidco/features/possible_clients/presentation/pages/possible_clients_page.dart';
 import 'package:saidco/ui/common/custom_app_bar.dart';
 
 class MainLayout extends StatefulWidget {
@@ -25,7 +27,10 @@ class _MainLayoutState extends State<MainLayout> {
       create: (context) => sl<FormResponseCubit>(),
       child: ResponsesPage(),
     ),
-    Center(child: Text('صفحة العملاء المحتملين')),
+    BlocProvider(
+      create: (context) => sl<PossibleClientsCubit>(),
+      child: PossibleClientsPage(),
+    ),
     Center(child: Text('صفحة إدارة التسكينات')),
     Center(child: Text('صفحة إدارة الحسابات')),
   ];

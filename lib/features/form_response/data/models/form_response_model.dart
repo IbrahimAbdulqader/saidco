@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:saidco/features/form_response/domain/entities/form_response.dart';
 
 class FormResponseModel extends FormResponse {
@@ -43,7 +42,7 @@ class FormResponseModel extends FormResponse {
       additionalInfo:
           jsonData['(اختياري) هل لديك أي ملاحظات اخرى ؟'] ??
           'الملاحظات غير موجودة',
-      submissionDate: jsonData['submissionDate'] ?? Timestamp.now(),
+      submissionDate: jsonData['submissionDate'] ?? DateTime.now(),
       isContacted: jsonData['isContacted'] ?? false,
     );
   }

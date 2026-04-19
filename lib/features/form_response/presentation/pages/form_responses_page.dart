@@ -152,8 +152,26 @@ class _ResponsesPageState extends State<ResponsesPage> {
                         onTap: () {
                           showDialog(
                             context: context,
-                            builder: (context) =>
-                                ProfileDialog(formResponse: response),
+                            builder: (context) => ProfileDialog(
+                              id: response.responseId,
+                              name: response.name,
+                              phoneNumber: response.phoneNumber,
+                              programLevel: response.programLevel,
+                              expectedCost: response.expectedCost,
+                              travelDate: response.travelDate,
+                              dayCount: response.dayCount,
+                              roomType: response.roomType,
+                              hotelPreferences: response.hotelPreferences,
+                              flightPreferences: response.flightPreferences,
+                              additionalInfo: response.additionalInfo,
+                              isContacted: response.isContacted,
+                              toggleContacted: () {
+                                formResponseCubit.toggleContactStatus(
+                                  response.responseId,
+                                  !response.isContacted,
+                                );
+                              },
+                            ),
                           );
                         },
                         borderRadius: BorderRadius.circular(12),
@@ -205,9 +223,10 @@ class _ResponsesPageState extends State<ResponsesPage> {
                                           await Future.delayed(
                                             Duration(milliseconds: 50),
                                           );
-                                          formResponseCubit.transferToPossibleClient(
-                                            response,
-                                          );
+                                          formResponseCubit
+                                              .transferToPossibleClient(
+                                                response,
+                                              );
                                         },
                                         child: Text('تحويل لعميل محتمل'),
                                       ),

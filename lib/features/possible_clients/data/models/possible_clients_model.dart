@@ -20,28 +20,20 @@ class PossibleClientModel extends PossibleClient {
   factory PossibleClientModel.fromJson(Map<String, dynamic> jsonData) {
     return PossibleClientModel(
       clientId: jsonData['clientId'] ?? 'Client ID not found',
-      name: jsonData['اسم العميل'] ?? 'اسم العميل غير موجود',
-      phoneNumber: jsonData['رقم هاتف العميل'] ?? 'ررقم الهاتف غير موجود',
-      programLevel:
-          jsonData['حدد مستوى البرنامج'] ?? 'مستوى البرنامج غير موجود',
-      expectedCost:
-          jsonData['حدد السعر المتوقع للبرنامج'] ?? 'السعر المتوقع غير موجود',
-      travelDate: jsonData['حدد فترة الحجز'] == null
+      name: jsonData['client_name'] ?? 'اسم العميل غير موجود',
+      phoneNumber: jsonData['client_phone'] ?? 'ررقم الهاتف غير موجود',
+      programLevel: jsonData['program_level'] ?? 'مستوى البرنامج غير موجود',
+      expectedCost: jsonData['expected_cost'] ?? 'السعر المتوقع غير موجود',
+      travelDate: jsonData['travel_date'] == null
           ? 'تاريخ السفر غير موجود'
-          : jsonData['حدد فترة الحجز'].toString(),
-      dayCount:
-          jsonData['حدد عدد أيام الرحلة المناسبة'] ?? 'عدد الأيام غير موجود',
-      roomType:
-          jsonData['حدد نوع غرف الفنادق المناسبة'] ?? 'نوع الغرفة غير موجود',
+          : jsonData['travel_date'].toString(),
+      dayCount: jsonData['day_count'] ?? 'عدد الأيام غير موجود',
+      roomType: jsonData['room_type'] ?? 'نوع الغرفة غير موجود',
       hotelPreferences:
-          jsonData['(اختياري) هل لديك تفضيلات من حيث الفنادق السكنية ؟'] ??
-          'تفضيلات الفنادق غير موجودة',
+          jsonData['hotel_preferences'] ?? 'تفضيلات الفنادق غير موجودة',
       flightPreferences:
-          jsonData['(اختياري) هل لديك تفضيلات من حيث شركة الطيران ؟'] ??
-          'تفضيلات الطيران غير موجودة',
-      additionalInfo:
-          jsonData['(اختياري) هل لديك أي ملاحظات اخرى ؟'] ??
-          'الملاحظات غير موجودة',
+          jsonData['flight_preferences'] ?? 'تفضيلات الطيران غير موجودة',
+      additionalInfo: jsonData['additional_info'] ?? 'الملاحظات غير موجودة',
       submissionDate: jsonData['submissionDate'] ?? Timestamp.now(),
     );
   }
@@ -59,7 +51,7 @@ class PossibleClientModel extends PossibleClient {
       'hotel_preferences': hotelPreferences,
       'flight_preferences': flightPreferences,
       'additional_info': additionalInfo,
-      'submission_date': submissionDate,
+      'submission_date': FieldValue.serverTimestamp(),
     };
   }
 }

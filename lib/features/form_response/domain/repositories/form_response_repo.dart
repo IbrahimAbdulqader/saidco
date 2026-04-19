@@ -7,4 +7,6 @@ abstract class FormResponseRepo {
   Future<void> transferToPossibleClient(PossibleClient possibleClient);
 
   Future<void> deleteFormResponse(String responseId);
+
+  Future<void> toggleContactStatus(String responseId, bool newStatus);
 }

@@ -1,19 +1,44 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:saidco/features/form_response/domain/entities/form_response.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/custom_rich_text.dart';
 import 'package:saidco/core/utils/custom_toast.dart';
 
 class ProfileDialog extends StatelessWidget {
-  const ProfileDialog({super.key, required this.formResponse});
+  const ProfileDialog({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.phoneNumber,
+    required this.programLevel,
+    required this.expectedCost,
+    required this.travelDate,
+    required this.dayCount,
+    required this.roomType,
+    required this.hotelPreferences,
+    required this.flightPreferences,
+    required this.additionalInfo,
+    this.isContacted,
+    this.toggleContacted,
+  });
 
-  final FormResponse formResponse;
+  final String id;
+  final String name;
+  final String phoneNumber;
+  final String programLevel;
+  final String expectedCost;
+  final String travelDate;
+  final String dayCount;
+  final String roomType;
+  final String hotelPreferences;
+  final String flightPreferences;
+  final String additionalInfo;
+
+  final bool? isContacted;
+  final VoidCallback? toggleContacted;
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       backgroundColor: Colors.grey[100],
@@ -36,38 +61,30 @@ class ProfileDialog extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CustomRichText(
-                        title: 'الاسم',
-                        subtitle: formResponse.name,
-                      ),
+                      CustomRichText(title: 'الاسم', subtitle: name),
                       Spacer(),
-                      Text(
-                        formResponse.isContacted
-                            ? 'تم التواصل'
-                            : 'لم يتم التواصل',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: formResponse.isContacted
-                              ? Colors.green
-                              : Colors.red,
+                      if (isContacted != null)
+                        Text(
+                          isContacted! ? 'تم التواصل' : 'لم يتم التواصل',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: isContacted! ? Colors.green : Colors.red,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                   Row(
                     children: [
                       CustomRichText(
                         title: 'رقم الهاتف',
-                        subtitle: formResponse.phoneNumber,
+                        subtitle: phoneNumber,
                       ),
                       SizedBox(width: 5),
                       Padding(
                         padding: const EdgeInsets.only(top: 35),
                         child: IconButton(
                           onPressed: () {
-                            Clipboard.setData(
-                              ClipboardData(text: formResponse.phoneNumber),
-                            );
+                            Clipboard.setData(ClipboardData(text: phoneNumber));
 
                             showCustomToast(context, 'تم النسخ بنجاح');
                           },
@@ -95,43 +112,40 @@ class ProfileDialog extends StatelessWidget {
                       children: [
                         CustomRichText(
                           title: 'المستوى',
-                          subtitle: formResponse.programLevel,
+                          subtitle: programLevel,
                         ),
                         CustomRichText(
                           title: 'السعر المتوقع',
-                          subtitle: formResponse.expectedCost.trim() == ''
+                          subtitle: expectedCost.trim() == ''
                               ? 'لا يوجد'
-                              : formResponse.expectedCost,
+                              : expectedCost,
                         ),
                         CustomRichText(
                           title: 'تاريخ السفر',
-                          subtitle: formResponse.travelDate,
+                          subtitle: travelDate,
                         ),
                         CustomRichText(
                           title: 'عدد الأيام',
-                          subtitle: formResponse.dayCount.toString(),
+                          subtitle: dayCount.toString(),
                         ),
-                        CustomRichText(
-                          title: 'نوع الغرفة',
-                          subtitle: formResponse.roomType,
-                        ),
+                        CustomRichText(title: 'نوع الغرفة', subtitle: roomType),
                         CustomRichText(
                           title: 'ملاحظات الفنادق السكنية',
-                          subtitle: formResponse.hotelPreferences.trim() == ''
+                          subtitle: hotelPreferences.trim() == ''
                               ? 'لا يوجد'
-                              : formResponse.hotelPreferences,
+                              : hotelPreferences,
                         ),
                         CustomRichText(
                           title: 'ملاحظات شركة الطيران',
-                          subtitle: formResponse.flightPreferences.trim() == ''
+                          subtitle: flightPreferences.trim() == ''
                               ? 'لا يوجد'
-                              : formResponse.flightPreferences,
+                              : flightPreferences,
                         ),
                         CustomRichText(
                           title: 'الملاحظات الاضافية',
-                          subtitle: formResponse.additionalInfo.trim() == ''
+                          subtitle: additionalInfo.trim() == ''
                               ? 'لا يوجد'
-                              : formResponse.additionalInfo,
+                              : additionalInfo,
                         ),
                       ],
                     ),
@@ -149,24 +163,20 @@ class ProfileDialog extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                   ),
                   Spacer(),
-                  CustomButton(
-                    text: !formResponse.isContacted
-                        ? 'تم التواصل'
-                        : 'لم يتم التواصل',
-                    backgroundColor: !formResponse.isContacted
-                        ? Colors.greenAccent.withValues(alpha: 0.35)
-                        : Colors.redAccent.withValues(alpha: 0.35),
-                    foregroundColor: !formResponse.isContacted
-                        ? Colors.lightGreen[700]
-                        : Colors.red[700],
-                    onPressed: () {
-                      firestore
-                          .collection('form_submissions')
-                          .doc(formResponse.responseId)
-                          .update({'isContacted': !formResponse.isContacted});
-                      Navigator.pop(context);
-                    },
-                  ),
+                  if (isContacted != null && toggleContacted != null)
+                    CustomButton(
+                      text: !isContacted! ? 'تم التواصل' : 'لم يتم التواصل',
+                      backgroundColor: !isContacted!
+                          ? Colors.greenAccent.withValues(alpha: 0.35)
+                          : Colors.redAccent.withValues(alpha: 0.35),
+                      foregroundColor: !isContacted!
+                          ? Colors.lightGreen[700]
+                          : Colors.red[700],
+                      onPressed: () {
+                        toggleContacted!();
+                        Navigator.pop(context);
+                      },
+                    ),
                 ],
               ),
             ],

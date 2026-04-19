@@ -6,7 +6,7 @@ import 'package:saidco/features/possible_clients/domain/entities/possible_client
 class FormResponseRepoImpl implements FormResponseRepo {
   FormResponseRepoImpl(this._remoteDataSource);
 
-  final FormRemoteDataSource _remoteDataSource;
+  final FormRemoteRemoteDatasource _remoteDataSource;
 
   @override
   Stream<List<FormResponse>> getFormResponse(String? filterStatus) {
@@ -21,5 +21,10 @@ class FormResponseRepoImpl implements FormResponseRepo {
   @override
   Future<void> deleteFormResponse(String responseId) {
     return _remoteDataSource.deleteFormResponse(responseId);
+  }
+
+  @override
+  Future<void> toggleContactStatus(String responseId, bool newStatus) {
+    return _remoteDataSource.toggleContactStatus(responseId, newStatus);
   }
 }

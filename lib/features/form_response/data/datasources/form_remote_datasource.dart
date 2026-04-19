@@ -4,13 +4,14 @@ import 'package:saidco/features/form_response/data/models/form_response_model.da
 import 'package:saidco/features/possible_clients/data/models/possible_clients_model.dart';
 import 'package:saidco/features/possible_clients/domain/entities/possible_clients.dart';
 
-abstract class FormRemoteDataSource {
+abstract class FormRemoteRemoteDatasource {
   Stream<List<FormResponseModel>> getFormResponses(String? filterStatus);
   Future<void> transferToPossibleClient(PossibleClient possibleClient);
   Future<void> deleteFormResponse(String responseId);
+  Future<void> toggleContactStatus(String responseId, bool newStatus);
 }
 
-class FormRemoteDataSourceImpl implements FormRemoteDataSource {
+class FormRemoteDataSourceImpl implements FormRemoteRemoteDatasource {
   FormRemoteDataSourceImpl({FirebaseFirestore? firestore})
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
@@ -59,7 +60,7 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
       hotelPreferences: possibleClient.hotelPreferences,
       flightPreferences: possibleClient.flightPreferences,
       additionalInfo: possibleClient.additionalInfo,
-      submissionDate: possibleClient.submissionDate,
+      submissionDate: Timestamp.now(),
     );
     final data = model.toJson();
     try {
@@ -86,6 +87,21 @@ class FormRemoteDataSourceImpl implements FormRemoteDataSource {
     } catch (e) {
       throw ServerException(
         'An unexpected error occurred during form response deletion',
+      );
+    }
+  }
+
+  @override
+  Future<void> toggleContactStatus(String responseId, bool newStatus) async {
+    try {
+      await _firestore.collection('form_submissions').doc(responseId).update({
+        'isContacted': newStatus,
+      });
+    } on FirebaseException catch (e) {
+      throw ServerException('Failed to toggle contact status: ${e.message}');
+    } catch (e) {
+      throw ServerException(
+        'An unexpected error occurred during contact status toggle',
       );
     }
   }
