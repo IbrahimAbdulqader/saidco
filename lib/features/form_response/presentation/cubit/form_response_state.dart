@@ -11,18 +11,18 @@ abstract class FormResponseState extends Equatable {
 class FormResponseLoading extends FormResponseState {}
 
 class FormResponseLoaded extends FormResponseState {
-  final List<FormResponse> responses;
-
   const FormResponseLoaded(this.responses);
+
+  final List<FormResponse> responses;
 
   @override
   List<Object> get props => [responses];
 }
 
 class FormResponseError extends FormResponseState {
-  final String message;
-
   const FormResponseError(this.message);
+
+  final String message;
 
   @override
   List<Object> get props => [message];
