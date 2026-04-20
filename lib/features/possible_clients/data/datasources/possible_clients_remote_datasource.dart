@@ -49,16 +49,16 @@ class PossibleClientsRemoteDatasourceImpl
   Stream<List<PossibleClientModel>> getPossibleClients() {
     return _firestore
         .collection('possible_clients')
+        .orderBy('submission_date', descending: true)
         .snapshots()
         .map((snapshot) {
-          List<PossibleClientModel> possibleClients = snapshot.docs.map((doc) {
+          return snapshot.docs.map((doc) {
             return PossibleClientModel.fromJson(doc.data());
           }).toList();
 
-          possibleClients.sort(
-            (a, b) => b.submissionDate.compareTo(a.submissionDate),
-          );
-          return possibleClients;
+          // possibleClients.sort(
+          //   (a, b) => b.submissionDate.compareTo(a.submissionDate),
+          // );
         })
         .handleError((e) {
           ServerException('Failed to fetch possible clients: $e');

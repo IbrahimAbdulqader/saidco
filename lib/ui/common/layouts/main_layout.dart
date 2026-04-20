@@ -5,6 +5,7 @@ import 'package:saidco/features/form_response/presentation/cubit/form_response_c
 import 'package:saidco/features/form_response/presentation/pages/form_responses_page.dart';
 import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_cubit.dart';
 import 'package:saidco/features/possible_clients/presentation/pages/possible_clients_page.dart';
+import 'package:saidco/features/possible_clients/presentation/widgets/add_client_dialog.dart';
 import 'package:saidco/ui/common/custom_app_bar.dart';
 
 class MainLayout extends StatefulWidget {
@@ -37,6 +38,24 @@ class _MainLayoutState extends State<MainLayout> {
 
   int selectedIndex = 0;
 
+  Widget? _buildFAB(BuildContext context, int selectedIndex) {
+    if (selectedIndex != 1) {
+      return null;
+    }
+
+    return FloatingActionButton.extended(
+      label: Text('إضافة عميل'),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AddClientDialog();
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +64,8 @@ class _MainLayoutState extends State<MainLayout> {
         preferredSize: Size.fromHeight(100),
         child: CustomAppBar(title: _titles[selectedIndex]),
       ),
+      floatingActionButton: _buildFAB(context, selectedIndex),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
