@@ -4,15 +4,15 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.label,
-    this.content,
     required this.controller,
     this.isMultiLine = false,
+    this.validator,
   });
 
   final String label;
-  final String? content;
   final bool isMultiLine;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           minLines: 1,
           maxLines: isMultiLine ? 5 : 1,
-          initialValue: content,
+          validator: validator,
           decoration: InputDecoration(
             isDense: true,
             enabledBorder: OutlineInputBorder(

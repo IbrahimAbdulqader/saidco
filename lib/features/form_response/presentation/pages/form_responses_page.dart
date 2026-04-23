@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:saidco/core/enums/filtering_enums.dart';
+import 'package:saidco/core/utils/date_helper.dart';
 import 'package:saidco/features/form_response/presentation/cubit/form_response_cubit.dart';
 import 'package:saidco/features/form_response/presentation/cubit/form_response_state.dart';
 import 'package:saidco/features/form_response/presentation/widgets/filter_toggle_buttons.dart';
@@ -11,18 +12,23 @@ import 'package:saidco/ui/common/header_cell.dart';
 import 'package:saidco/features/form_response/presentation/widgets/profile_dialog.dart';
 import 'package:saidco/core/utils/custom_toast.dart';
 
-class ResponsesPage extends StatefulWidget {
-  const ResponsesPage({super.key});
+class FormResponsesPage extends StatefulWidget {
+  const FormResponsesPage({super.key});
 
   @override
-  State<ResponsesPage> createState() => _ResponsesPageState();
+  State<FormResponsesPage> createState() => _FormResponsesPageState();
 }
 
-class _ResponsesPageState extends State<ResponsesPage> {
+class _FormResponsesPageState extends State<FormResponsesPage> {
   @override
   void initState() {
     super.initState();
     context.read<FormResponseCubit>().getFormResponses();
+  }
+
+  String formatDate(String dateString) {
+    DateTime date = DateTime.parse(dateString);
+    return DateHelper.formatShortDate(date);
   }
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -31,6 +37,7 @@ class _ResponsesPageState extends State<ResponsesPage> {
   @override
   Widget build(BuildContext context) {
     final formResponseCubit = context.read<FormResponseCubit>();
+
     return BlocBuilder<FormResponseCubit, FormResponseState>(
       builder: (context, state) {
         if (state is FormResponseLoading) {
@@ -329,7 +336,10 @@ class _ResponsesPageState extends State<ResponsesPage> {
                               ),
                               TextCell(text: response.phoneNumber, flex: 2),
                               TextCell(text: response.programLevel, flex: 2),
-                              TextCell(text: response.travelDate, flex: 2),
+                              TextCell(
+                                text: formatDate(response.travelDate),
+                                flex: 2,
+                              ),
                               TextCell(text: response.dayCount, flex: 2),
                               TextCell(
                                 text: response.roomType == 'ثلاثي'

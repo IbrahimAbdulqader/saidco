@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:saidco/core/utils/custom_toast.dart';
+import 'package:saidco/core/utils/date_helper.dart';
 import 'package:saidco/features/form_response/presentation/widgets/profile_dialog.dart';
 import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_cubit.dart';
 import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_states.dart';
@@ -25,8 +26,15 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
     context.read<PossibleClientsCubit>().getPossibleClients();
   }
 
+  String formatDate(String dateString) {
+    DateTime date = DateTime.parse(dateString);
+    return DateHelper.formatShortDate(date);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final possibleClientCubit = context.read<PossibleClientsCubit>();
+
     return BlocBuilder<PossibleClientsCubit, PossibleClientsState>(
       builder: (context, state) {
         if (state is PossibleClientsLoading) {
@@ -124,19 +132,23 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                         onTap: () {
                           showDialog(
                             context: context,
-                            builder: (context) => ProfileDialog(
-                              id: possibleClient.clientId,
-                              name: possibleClient.name,
-                              phoneNumber: possibleClient.phoneNumber,
-                              programLevel: possibleClient.programLevel,
-                              expectedCost: possibleClient.expectedCost,
-                              travelDate: possibleClient.travelDate,
-                              dayCount: possibleClient.dayCount,
-                              roomType: possibleClient.roomType,
-                              hotelPreferences: possibleClient.hotelPreferences,
-                              flightPreferences:
-                                  possibleClient.flightPreferences,
-                              additionalInfo: possibleClient.additionalInfo,
+                            builder: (context) => BlocProvider.value(
+                              value: possibleClientCubit,
+                              child: ProfileDialog(
+                                id: possibleClient.clientId,
+                                name: possibleClient.name,
+                                phoneNumber: possibleClient.phoneNumber,
+                                programLevel: possibleClient.programLevel,
+                                expectedCost: possibleClient.expectedCost,
+                                travelDate: possibleClient.travelDate,
+                                dayCount: possibleClient.dayCount,
+                                roomType: possibleClient.roomType,
+                                hotelPreferences:
+                                    possibleClient.hotelPreferences,
+                                flightPreferences:
+                                    possibleClient.flightPreferences,
+                                additionalInfo: possibleClient.additionalInfo,
+                              ),
                             ),
                           );
                         },
@@ -283,7 +295,7 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                 flex: 2,
                               ),
                               TextCell(
-                                text: possibleClient.travelDate,
+                                text: formatDate(possibleClient.travelDate),
                                 flex: 2,
                               ),
                               TextCell(text: possibleClient.dayCount, flex: 2),

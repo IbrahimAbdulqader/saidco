@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:saidco/core/utils/date_helper.dart';
+import 'package:saidco/core/validators/validators.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CustomDatePicker extends StatelessWidget {
@@ -13,27 +15,6 @@ class CustomDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String getWeekdayName(int weekday) {
-      switch (weekday) {
-        case 1:
-          return 'الإتنين';
-        case 2:
-          return 'الثلاثاء';
-        case 3:
-          return 'الأربعاء';
-        case 4:
-          return 'الخميس';
-        case 5:
-          return 'الجمعة';
-        case 6:
-          return 'السبت';
-        case 7:
-          return 'الأحد';
-        default:
-          return '';
-      }
-    }
-
     return Column(
       children: [
         const Align(
@@ -64,11 +45,14 @@ class CustomDatePicker extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: SfDateRangePicker(
+                          confirmText: 'تأكيد',
+                          cancelText: 'إلغاء',
                           initialSelectedDate: selectedDate,
                           selectionMode: DateRangePickerSelectionMode.single,
                           showActionButtons: true,
                           onSubmit: (Object? value) {
                             if (value is DateTime) {
+                              validateDate(value);
                               onDateChanged(value);
                             }
                             Navigator.pop(context);
@@ -89,7 +73,7 @@ class CustomDatePicker extends StatelessWidget {
               title: Text(
                 selectedDate == null
                     ? 'اختر تاريخ السفر'
-                    : ' ${selectedDate!.day} / ${selectedDate!.month} / ${selectedDate!.year} - ${getWeekdayName(selectedDate!.weekday)}',
+                    : DateHelper.formatDate(selectedDate!),
                 style: selectedDate == null
                     ? Theme.of(
                         context,

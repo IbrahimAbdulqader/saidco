@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:saidco/core/utils/date_helper.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/custom_rich_text.dart';
 import 'package:saidco/core/utils/custom_toast.dart';
@@ -39,6 +40,11 @@ class ProfileDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formatDate(String dateString) {
+      DateTime date = DateTime.parse(dateString);
+      return DateHelper.formatDate(date);
+    }
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       backgroundColor: Colors.grey[100],
@@ -122,7 +128,7 @@ class ProfileDialog extends StatelessWidget {
                         ),
                         CustomRichText(
                           title: 'تاريخ السفر',
-                          subtitle: travelDate,
+                          subtitle: formatDate(travelDate),
                         ),
                         CustomRichText(
                           title: 'عدد الأيام',

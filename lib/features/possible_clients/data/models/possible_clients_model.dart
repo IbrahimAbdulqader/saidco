@@ -18,15 +18,15 @@ class PossibleClientModel extends PossibleClient {
   });
 
   factory PossibleClientModel.fromJson(Map<String, dynamic> jsonData) {
+    final firebaseSubmissionDate = jsonData['submissionDate'] as Timestamp?;
+
     return PossibleClientModel(
       clientId: jsonData['clientId'] ?? 'Client ID not found',
       name: jsonData['client_name'] ?? 'اسم العميل غير موجود',
-      phoneNumber: jsonData['client_phone'] ?? 'ررقم الهاتف غير موجود',
+      phoneNumber: jsonData['client_phone'] ?? 'رقم الهاتف غير موجود',
       programLevel: jsonData['program_level'] ?? 'مستوى البرنامج غير موجود',
       expectedCost: jsonData['expected_cost'] ?? 'السعر المتوقع غير موجود',
-      travelDate: jsonData['travel_date'] == null
-          ? 'تاريخ السفر غير موجود'
-          : jsonData['travel_date'].toString(),
+      travelDate: jsonData['travel_date'] ?? 'تاريخ السفر غير موجود',
       dayCount: jsonData['day_count'] ?? 'عدد الأيام غير موجود',
       roomType: jsonData['room_type'] ?? 'نوع الغرفة غير موجود',
       hotelPreferences:
@@ -34,7 +34,9 @@ class PossibleClientModel extends PossibleClient {
       flightPreferences:
           jsonData['flight_preferences'] ?? 'تفضيلات الطيران غير موجودة',
       additionalInfo: jsonData['additional_info'] ?? 'الملاحظات غير موجودة',
-      submissionDate: jsonData['submissionDate'] ?? Timestamp.now(),
+      submissionDate: firebaseSubmissionDate != null
+          ? firebaseSubmissionDate.toDate()
+          : DateTime.now(),
     );
   }
 

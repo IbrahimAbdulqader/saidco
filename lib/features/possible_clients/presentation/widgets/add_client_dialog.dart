@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:saidco/core/validators/validators.dart';
 import 'package:saidco/features/possible_clients/domain/entities/possible_clients.dart';
 import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_cubit.dart';
 import 'package:saidco/features/possible_clients/presentation/widgets/custom_dropdown_menu.dart';
@@ -42,28 +42,50 @@ class AddClientDialog extends StatefulWidget {
 }
 
 class _AddClientDialogState extends State<AddClientDialog> {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController programLevelController = TextEditingController();
   TextEditingController expectedCostController = TextEditingController();
-  TextEditingController dayCountController = TextEditingController();
-  TextEditingController roomTypeController = TextEditingController();
   TextEditingController hotelPreferencesController = TextEditingController();
   TextEditingController flightPreferencesController = TextEditingController();
   TextEditingController additionalInfoController = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  String? programLevel;
+  String? dayCount;
+  String? roomType;
 
   DateTime myTravelDateVariable = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.name);
+    phoneController = TextEditingController(text: widget.phoneNumber);
+    expectedCostController = TextEditingController(text: widget.expectedCost);
+    hotelPreferencesController = TextEditingController(
+      text: widget.hotelPreferences,
+    );
+    flightPreferencesController = TextEditingController(
+      text: widget.flightPreferences,
+    );
+    additionalInfoController = TextEditingController(
+      text: widget.additionalInfo,
+    );
+    if (widget.travelDate != null && widget.travelDate!.isNotEmpty) {
+      myTravelDateVariable =
+          DateTime.tryParse(widget.travelDate!) ?? DateTime.now();
+    }
+
+    programLevel = widget.programLevel;
+    dayCount = widget.dayCount;
+    roomType = widget.roomType;
+  }
 
   @override
   void dispose() {
     super.dispose();
     nameController.dispose();
     phoneController.dispose();
-    programLevelController.dispose();
     expectedCostController.dispose();
-    dayCountController.dispose();
-    roomTypeController.dispose();
     hotelPreferencesController.dispose();
     flightPreferencesController.dispose();
     additionalInfoController.dispose();
@@ -74,15 +96,15 @@ class _AddClientDialogState extends State<AddClientDialog> {
       clientId: widget.id ?? UniqueKey().toString(),
       name: nameController.text,
       phoneNumber: phoneController.text,
-      programLevel: programLevelController.text,
+      programLevel: programLevel ?? 'لا يوجد',
       expectedCost: expectedCostController.text,
       travelDate: myTravelDateVariable.toString(),
-      dayCount: dayCountController.text,
-      roomType: roomTypeController.text,
+      dayCount: dayCount ?? 'لا يوجد',
+      roomType: roomType ?? 'لا يوجد',
       hotelPreferences: hotelPreferencesController.text,
       flightPreferences: flightPreferencesController.text,
       additionalInfo: additionalInfoController.text,
-      submissionDate: Timestamp.now(),
+      submissionDate: DateTime.now(),
     );
 
     await context.read<PossibleClientsCubit>().addPossibleClients(newClient);
@@ -108,6 +130,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
               Flexible(
                 child: SingleChildScrollView(
                   child: Form(
+                    autovalidateMode: AutovalidateMode.always,
                     key: formKey,
                     child: Column(
                       spacing: 20,
@@ -129,12 +152,14 @@ class _AddClientDialogState extends State<AddClientDialog> {
                         CustomTextField(
                           controller: nameController,
                           label: 'اسم العميل',
-                          content: widget.name,
+                          validator: (value) =>
+                              validateString(value, 'بجب إدخال اسم العميل'),
                         ),
                         CustomTextField(
                           controller: phoneController,
                           label: 'رقم الهاتف',
-                          content: widget.phoneNumber,
+                          validator: (value) =>
+                              validateString(value, 'بجب إدخال رقم الهاتف'),
                         ),
                         Row(
                           children: [
@@ -143,9 +168,9 @@ class _AddClientDialogState extends State<AddClientDialog> {
                                 label: 'المستوى',
                                 dropdownMenuEntries:
                                     [
-                                          Text('اقتصادي'),
-                                          Text('4 نجوم'),
-                                          Text('5 نجوم'),
+                                          Text('برنامج اقتصادي'),
+                                          Text('برنامج 4 نجوم'),
+                                          Text('برنامج 5 نجوم'),
                                         ]
                                         .map(
                                           (level) => DropdownMenuEntry(
@@ -161,7 +186,10 @@ class _AddClientDialogState extends State<AddClientDialog> {
                               child: CustomTextField(
                                 controller: expectedCostController,
                                 label: 'السعر المتوقع',
-                                content: widget.expectedCost,
+                                validator: (value) => validateString(
+                                  value,
+                                  'بجب كتابة السعر المتوقع',
+                                ),
                               ),
                             ),
                           ],
@@ -169,10 +197,21 @@ class _AddClientDialogState extends State<AddClientDialog> {
                         Row(
                           children: [
                             Expanded(
-                              child: CustomTextField(
-                                controller: dayCountController,
+                              child: CustomDropdownMenu(
                                 label: 'عدد الأيام',
-                                content: widget.dayCount,
+                                dropdownMenuEntries:
+                                    [
+                                          Text('4 أيام'),
+                                          Text('10 أيام'),
+                                          Text('15 يوم'),
+                                        ]
+                                        .map(
+                                          (dayCount) => DropdownMenuEntry(
+                                            value: dayCount.data!,
+                                            label: dayCount.data!,
+                                          ),
+                                        )
+                                        .toList(),
                               ),
                             ),
                             SizedBox(width: 20),
@@ -208,19 +247,16 @@ class _AddClientDialogState extends State<AddClientDialog> {
                         CustomTextField(
                           controller: hotelPreferencesController,
                           label: 'ملاحظات الفنادق السكنية',
-                          content: widget.hotelPreferences,
                           isMultiLine: true,
                         ),
                         CustomTextField(
                           controller: flightPreferencesController,
                           label: 'ملاحظات شركة الطيران',
-                          content: widget.flightPreferences,
                           isMultiLine: true,
                         ),
                         CustomTextField(
                           controller: additionalInfoController,
                           label: 'الملاحظات الاضافية',
-                          content: widget.additionalInfo,
                           isMultiLine: true,
                         ),
                       ],
@@ -244,8 +280,9 @@ class _AddClientDialogState extends State<AddClientDialog> {
                     backgroundColor: Colors.greenAccent.withValues(alpha: 0.35),
                     foregroundColor: Colors.lightGreen[700],
 
-                    onPressed: () {
-                      onSave();
+                    onPressed: () async {
+                      await onSave();
+                      if (!context.mounted) return;
                       showCustomToast(context, 'تم حفظ بيانات العميل بنجاح');
                       Navigator.pop(context);
                     },

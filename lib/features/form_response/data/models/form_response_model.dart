@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:saidco/features/form_response/domain/entities/form_response.dart';
 
 class FormResponseModel extends FormResponse {
@@ -18,6 +19,8 @@ class FormResponseModel extends FormResponse {
   });
 
   factory FormResponseModel.fromJson(Map<String, dynamic> jsonData) {
+    final firebaseSubmissionDate = jsonData['submissionDate'] as Timestamp?;
+
     return FormResponseModel(
       responseId: jsonData['responseId'] ?? 'Form ID not found',
       name: jsonData['اسم العميل'] ?? 'اسم العميل غير موجود',
@@ -42,7 +45,9 @@ class FormResponseModel extends FormResponse {
       additionalInfo:
           jsonData['(اختياري) هل لديك أي ملاحظات اخرى ؟'] ??
           'الملاحظات غير موجودة',
-      submissionDate: jsonData['submissionDate'] ?? DateTime.now(),
+      submissionDate: firebaseSubmissionDate != null
+          ? firebaseSubmissionDate.toDate()
+          : DateTime.now(),
       isContacted: jsonData['isContacted'] ?? false,
     );
   }

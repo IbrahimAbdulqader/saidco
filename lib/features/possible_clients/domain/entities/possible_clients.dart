@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class PossibleClient extends Equatable {
@@ -13,7 +12,7 @@ class PossibleClient extends Equatable {
   final String hotelPreferences;
   final String flightPreferences;
   final String additionalInfo;
-  final Timestamp submissionDate;
+  final DateTime submissionDate;
 
   const PossibleClient({
     required this.clientId,

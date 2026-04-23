@@ -60,7 +60,7 @@ class FormRemoteDataSourceImpl implements FormRemoteRemoteDatasource {
       hotelPreferences: possibleClient.hotelPreferences,
       flightPreferences: possibleClient.flightPreferences,
       additionalInfo: possibleClient.additionalInfo,
-      submissionDate: Timestamp.now(),
+      submissionDate: DateTime.now(),
     );
     final data = model.toJson();
     try {

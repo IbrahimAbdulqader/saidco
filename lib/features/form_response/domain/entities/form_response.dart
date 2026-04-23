@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class FormResponse extends Equatable {
@@ -13,7 +12,7 @@ class FormResponse extends Equatable {
   final String hotelPreferences;
   final String flightPreferences;
   final String additionalInfo;
-  final Timestamp submissionDate;
+  final DateTime submissionDate;
   final bool isContacted;
 
   const FormResponse({
