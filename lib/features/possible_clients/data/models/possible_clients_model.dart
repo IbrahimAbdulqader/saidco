@@ -22,18 +22,18 @@ class PossibleClientModel extends PossibleClient {
 
     return PossibleClientModel(
       clientId: jsonData['clientId'] ?? 'Client ID not found',
-      name: jsonData['client_name'] ?? 'اسم العميل غير موجود',
-      phoneNumber: jsonData['client_phone'] ?? 'رقم الهاتف غير موجود',
-      programLevel: jsonData['program_level'] ?? 'مستوى البرنامج غير موجود',
-      expectedCost: jsonData['expected_cost'] ?? 'السعر المتوقع غير موجود',
-      travelDate: jsonData['travel_date'] ?? 'تاريخ السفر غير موجود',
-      dayCount: jsonData['day_count'] ?? 'عدد الأيام غير موجود',
-      roomType: jsonData['room_type'] ?? 'نوع الغرفة غير موجود',
+      name: jsonData['clientName'] ?? 'اسم العميل غير موجود',
+      phoneNumber: jsonData['clientPhone'] ?? 'رقم الهاتف غير موجود',
+      programLevel: jsonData['programLevel'] ?? 'مستوى البرنامج غير موجود',
+      expectedCost: jsonData['expectedCost'] ?? 'السعر المتوقع غير موجود',
+      travelDate: jsonData['travelDate'] ?? 'تاريخ السفر غير موجود',
+      dayCount: jsonData['dayCount'] ?? 'عدد الأيام غير موجود',
+      roomType: jsonData['roomType'] ?? 'نوع الغرفة غير موجود',
       hotelPreferences:
-          jsonData['hotel_preferences'] ?? 'تفضيلات الفنادق غير موجودة',
+          jsonData['hotelPreferences'] ?? 'تفضيلات الفنادق غير موجودة',
       flightPreferences:
-          jsonData['flight_preferences'] ?? 'تفضيلات الطيران غير موجودة',
-      additionalInfo: jsonData['additional_info'] ?? 'الملاحظات غير موجودة',
+          jsonData['flightPreferences'] ?? 'تفضيلات الطيران غير موجودة',
+      additionalInfo: jsonData['additionalInfo'] ?? 'الملاحظات غير موجودة',
       submissionDate: firebaseSubmissionDate != null
           ? firebaseSubmissionDate.toDate()
           : DateTime.now(),
@@ -43,17 +43,17 @@ class PossibleClientModel extends PossibleClient {
   Map<String, dynamic> toJson() {
     return {
       'clientId': clientId,
-      'client_name': name,
-      'client_phone': phoneNumber,
-      'program_level': programLevel,
-      'expected_cost': expectedCost,
-      'travel_date': travelDate,
-      'day_count': dayCount,
-      'room_type': roomType,
-      'hotel_preferences': hotelPreferences,
-      'flight_preferences': flightPreferences,
-      'additional_info': additionalInfo,
-      'submission_date': FieldValue.serverTimestamp(),
+      'clientName': name,
+      'clientPhone': phoneNumber,
+      'programLevel': programLevel,
+      'expectedCost': expectedCost,
+      'travelDate': travelDate,
+      'dayCount': dayCount,
+      'roomType': roomType,
+      'hotelPreferences': hotelPreferences,
+      'flightPreferences': flightPreferences,
+      'additionalInfo': additionalInfo,
+      'submissionDate': FieldValue.serverTimestamp(),
     };
   }
 }

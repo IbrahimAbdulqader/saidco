@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +35,7 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final possibleClientCubit = context.read<PossibleClientsCubit>();
+    final possibleClientsCubit = context.read<PossibleClientsCubit>();
 
     return BlocBuilder<PossibleClientsCubit, PossibleClientsState>(
       builder: (context, state) {
@@ -115,7 +117,7 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.separated(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(bottom: 75),
                   itemCount: possibleClients.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 12),
@@ -133,7 +135,7 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                           showDialog(
                             context: context,
                             builder: (context) => BlocProvider.value(
-                              value: possibleClientCubit,
+                              value: possibleClientsCubit,
                               child: ProfileDialog(
                                 id: possibleClient.clientId,
                                 name: possibleClient.name,
@@ -199,74 +201,81 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                       onTap: () {
                                         showDialog(
                                           context: context,
-                                          builder: (context) => AlertDialog(
-                                            content: SizedBox(
-                                              height: 200,
-                                              width: 350,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                  8.0,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        'هل أنت متأكد من حذف هذا التسجيل؟',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                          builder: (dialogContext) => BlocProvider.value(
+                                            value: possibleClientsCubit,
+                                            child: AlertDialog(
+                                              content: SizedBox(
+                                                height: 200,
+                                                width: 350,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    8.0,
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                          'هل أنت متأكد من حذف هذا التسجيل؟',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(height: 50),
-                                                    Text(
-                                                      'الاسم : ${possibleClient.name}',
-                                                    ),
-                                                    Spacer(),
-                                                    Row(
-                                                      children: [
-                                                        CustomButton(
-                                                          width: 130,
-                                                          text: 'إغلاق',
-                                                          onPressed: () =>
+                                                      SizedBox(height: 50),
+                                                      Text(
+                                                        'الاسم : ${possibleClient.name}',
+                                                      ),
+                                                      Spacer(),
+                                                      Row(
+                                                        children: [
+                                                          CustomButton(
+                                                            width: 130,
+                                                            text: 'إغلاق',
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                  dialogContext,
+                                                                ),
+                                                          ),
+                                                          Spacer(),
+                                                          CustomButton(
+                                                            width: 140,
+                                                            text: 'حذف التسجيل',
+                                                            backgroundColor:
+                                                                Colors.redAccent
+                                                                    .withValues(
+                                                                      alpha:
+                                                                          0.35,
+                                                                    ),
+                                                            foregroundColor:
+                                                                Colors.red[700],
+                                                            onPressed: () {
+                                                              log(
+                                                                possibleClient
+                                                                    .clientId
+                                                                    .toString(),
+                                                              );
+                                                              possibleClientsCubit
+                                                                  .deletePossibleClient(
+                                                                    possibleClient
+                                                                        .clientId,
+                                                                  );
                                                               Navigator.pop(
                                                                 context,
-                                                              ),
-                                                        ),
-                                                        Spacer(),
-                                                        CustomButton(
-                                                          width: 140,
-                                                          text: 'حذف التسجيل',
-                                                          backgroundColor:
-                                                              Colors.redAccent
-                                                                  .withValues(
-                                                                    alpha: 0.35,
-                                                                  ),
-                                                          foregroundColor:
-                                                              Colors.red[700],
-                                                          onPressed: () {
-                                                            context
-                                                                .read<
-                                                                  PossibleClientsCubit
-                                                                >()
-                                                                .deletePossibleClient(
-                                                                  possibleClient
-                                                                      .clientId,
-                                                                );
-                                                            Navigator.pop(
-                                                              context,
-                                                            );
-                                                            showCustomToast(
-                                                              context,
-                                                              'تم حذف التسجيل بنجاح',
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                              );
+                                                              showCustomToast(
+                                                                context,
+                                                                'تم حذف التسجيل بنجاح',
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),

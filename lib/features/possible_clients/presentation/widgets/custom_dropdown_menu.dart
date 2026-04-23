@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
-class CustomDropdownMenu extends StatefulWidget {
+class CustomDropdownMenu extends StatelessWidget {
   const CustomDropdownMenu({
     super.key,
     required this.dropdownMenuEntries,
     required this.label,
+    required this.errorMessage,
+    required this.controller,
+    required this.onSelected,
   });
 
   final String label;
   final List<DropdownMenuEntry> dropdownMenuEntries;
+  final String? errorMessage;
+  final TextEditingController controller;
+  final ValueChanged<dynamic>? onSelected;
 
-  @override
-  State<CustomDropdownMenu> createState() => _CustomDropdownMenuState();
-}
-
-class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,15 +23,21 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            widget.label,
+            label,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(height: 8),
         DropdownMenu(
           width: 510,
+          errorText: errorMessage,
+          controller: controller,
+          onSelected: onSelected,
           inputDecorationTheme: InputDecorationTheme(
-            constraints: BoxConstraints(maxHeight: 40),
+            constraints: BoxConstraints(
+              minHeight: 40,
+              maxHeight: errorMessage != null ? 60 : 40,
+            ),
             isDense: true,
             contentPadding: EdgeInsets.symmetric(horizontal: 12),
             enabledBorder: OutlineInputBorder(
@@ -44,8 +51,16 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
               ),
               borderRadius: BorderRadius.circular(12),
             ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 1.5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
-          dropdownMenuEntries: widget.dropdownMenuEntries,
+          dropdownMenuEntries: dropdownMenuEntries,
         ),
       ],
     );

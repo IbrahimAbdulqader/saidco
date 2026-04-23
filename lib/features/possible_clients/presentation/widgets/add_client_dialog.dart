@@ -45,15 +45,21 @@ class _AddClientDialogState extends State<AddClientDialog> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController programLevelController = TextEditingController();
+  TextEditingController dayCountController = TextEditingController();
+  TextEditingController roomTypeController = TextEditingController();
   TextEditingController expectedCostController = TextEditingController();
   TextEditingController hotelPreferencesController = TextEditingController();
   TextEditingController flightPreferencesController = TextEditingController();
   TextEditingController additionalInfoController = TextEditingController();
-  String? programLevel;
-  String? dayCount;
-  String? roomType;
 
   DateTime myTravelDateVariable = DateTime.now();
+
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
+  String? programLevelError;
+  String? dayCountError;
+  String? roomTypeError;
 
   @override
   void initState() {
@@ -70,14 +76,13 @@ class _AddClientDialogState extends State<AddClientDialog> {
     additionalInfoController = TextEditingController(
       text: widget.additionalInfo,
     );
+    programLevelController = TextEditingController(text: widget.programLevel);
+    dayCountController = TextEditingController(text: widget.dayCount);
+    roomTypeController = TextEditingController(text: widget.roomType);
     if (widget.travelDate != null && widget.travelDate!.isNotEmpty) {
       myTravelDateVariable =
           DateTime.tryParse(widget.travelDate!) ?? DateTime.now();
     }
-
-    programLevel = widget.programLevel;
-    dayCount = widget.dayCount;
-    roomType = widget.roomType;
   }
 
   @override
@@ -89,18 +94,50 @@ class _AddClientDialogState extends State<AddClientDialog> {
     hotelPreferencesController.dispose();
     flightPreferencesController.dispose();
     additionalInfoController.dispose();
+    programLevelController.dispose();
+    dayCountController.dispose();
+    roomTypeController.dispose();
   }
 
   Future<void> onSave() async {
+    bool isNotValid = !formKey.currentState!.validate();
+
+    if (programLevelController.text.trim().isEmpty) {
+      programLevelError = 'يرجى اختيار نوع المستوى';
+    } else {
+      programLevelError = null;
+    }
+
+    if (dayCountController.text.trim().isEmpty) {
+      dayCountError = 'يرجى اختيار عدد الأيام';
+    } else {
+      dayCountError = null;
+    }
+
+    if (roomTypeController.text.trim().isEmpty) {
+      roomTypeError = 'يرجى اختيار نوع الغرفة';
+    } else {
+      roomTypeError = null;
+    }
+
+    setState(() {});
+
+    if (isNotValid ||
+        programLevelError != null ||
+        dayCountError != null ||
+        roomTypeError != null) {
+      return;
+    }
+
     PossibleClient newClient = PossibleClient(
       clientId: widget.id ?? UniqueKey().toString(),
       name: nameController.text,
       phoneNumber: phoneController.text,
-      programLevel: programLevel ?? 'لا يوجد',
+      programLevel: programLevelController.text,
       expectedCost: expectedCostController.text,
       travelDate: myTravelDateVariable.toString(),
-      dayCount: dayCount ?? 'لا يوجد',
-      roomType: roomType ?? 'لا يوجد',
+      dayCount: dayCountController.text,
+      roomType: roomTypeController.text,
       hotelPreferences: hotelPreferencesController.text,
       flightPreferences: flightPreferencesController.text,
       additionalInfo: additionalInfoController.text,
@@ -108,6 +145,11 @@ class _AddClientDialogState extends State<AddClientDialog> {
     );
 
     await context.read<PossibleClientsCubit>().addPossibleClients(newClient);
+
+    if (!mounted) return;
+
+    showCustomToast(context, 'تم حفظ بيانات العميل بنجاح');
+    Navigator.pop(context);
   }
 
   @override
@@ -130,7 +172,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
               Flexible(
                 child: SingleChildScrollView(
                   child: Form(
-                    autovalidateMode: AutovalidateMode.always,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     key: formKey,
                     child: Column(
                       spacing: 20,
@@ -153,29 +195,37 @@ class _AddClientDialogState extends State<AddClientDialog> {
                           controller: nameController,
                           label: 'اسم العميل',
                           validator: (value) =>
-                              validateString(value, 'بجب إدخال اسم العميل'),
+                              validateString(value, 'برجى إدخال اسم العميل'),
                         ),
                         CustomTextField(
                           controller: phoneController,
                           label: 'رقم الهاتف',
-                          validator: (value) =>
-                              validateString(value, 'بجب إدخال رقم الهاتف'),
+                          validator: (value) => validatePhoneNumber(value),
                         ),
                         Row(
                           children: [
                             Expanded(
                               child: CustomDropdownMenu(
                                 label: 'المستوى',
+                                errorMessage: programLevelError,
+                                controller: programLevelController,
+                                onSelected: (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    setState(() {
+                                      programLevelError = null;
+                                    });
+                                  }
+                                },
                                 dropdownMenuEntries:
                                     [
-                                          Text('برنامج اقتصادي'),
-                                          Text('برنامج 4 نجوم'),
-                                          Text('برنامج 5 نجوم'),
+                                          'برنامج اقتصادي',
+                                          'برنامج 4 نجوم',
+                                          'برنامج 5 نجوم',
                                         ]
                                         .map(
                                           (level) => DropdownMenuEntry(
-                                            value: level.data!,
-                                            label: level.data!,
+                                            value: level,
+                                            label: level,
                                           ),
                                         )
                                         .toList(),
@@ -188,7 +238,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
                                 label: 'السعر المتوقع',
                                 validator: (value) => validateString(
                                   value,
-                                  'بجب كتابة السعر المتوقع',
+                                  'برجى إدخال السعر المتوقع',
                                 ),
                               ),
                             ),
@@ -199,16 +249,21 @@ class _AddClientDialogState extends State<AddClientDialog> {
                             Expanded(
                               child: CustomDropdownMenu(
                                 label: 'عدد الأيام',
+                                errorMessage: dayCountError,
+                                controller: dayCountController,
+                                onSelected: (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    setState(() {
+                                      dayCountError = null;
+                                    });
+                                  }
+                                },
                                 dropdownMenuEntries:
-                                    [
-                                          Text('4 أيام'),
-                                          Text('10 أيام'),
-                                          Text('15 يوم'),
-                                        ]
+                                    ['4 أيام', '10 أيام', '15 يوم']
                                         .map(
                                           (dayCount) => DropdownMenuEntry(
-                                            value: dayCount.data!,
-                                            label: dayCount.data!,
+                                            value: dayCount,
+                                            label: dayCount,
                                           ),
                                         )
                                         .toList(),
@@ -217,18 +272,22 @@ class _AddClientDialogState extends State<AddClientDialog> {
                             SizedBox(width: 20),
                             Expanded(
                               child: CustomDropdownMenu(
+                                errorMessage: roomTypeError,
                                 label: 'نوع الغرفة',
+                                controller: roomTypeController,
+                                onSelected: (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    setState(() {
+                                      roomTypeError = null;
+                                    });
+                                  }
+                                },
                                 dropdownMenuEntries:
-                                    [
-                                          Text('فردي'),
-                                          Text('ثنائي'),
-                                          Text('ثلاثي'),
-                                          Text('رباعي'),
-                                        ]
+                                    ['فردي', 'ثنائي', 'ثلاثي', 'رباعي']
                                         .map(
                                           (roomType) => DropdownMenuEntry(
-                                            value: roomType.data!,
-                                            label: roomType.data!,
+                                            value: roomType,
+                                            label: roomType,
                                           ),
                                         )
                                         .toList(),
@@ -282,9 +341,6 @@ class _AddClientDialogState extends State<AddClientDialog> {
 
                     onPressed: () async {
                       await onSave();
-                      if (!context.mounted) return;
-                      showCustomToast(context, 'تم حفظ بيانات العميل بنجاح');
-                      Navigator.pop(context);
                     },
                   ),
                 ],

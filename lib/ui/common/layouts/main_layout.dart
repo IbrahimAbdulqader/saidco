@@ -37,19 +37,23 @@ class _MainLayoutState extends State<MainLayout> {
       return null;
     }
 
-    return FloatingActionButton.extended(
-      label: Text('إضافة عميل'),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return BlocProvider(
-              create: (context) => sl<PossibleClientsCubit>(),
-              child: AddClientDialog(),
-            );
-          },
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.only(right: 130),
+      child: FloatingActionButton.extended(
+        label: Text('إضافة عميل', style: TextStyle(fontSize: 14)),
+        extendedPadding: EdgeInsets.symmetric(horizontal: 20),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return BlocProvider(
+                create: (context) => sl<PossibleClientsCubit>(),
+                child: AddClientDialog(),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -67,7 +71,7 @@ class _MainLayoutState extends State<MainLayout> {
           child: CustomAppBar(title: _titles[selectedIndex]),
         ),
         floatingActionButton: _buildFAB(context, selectedIndex),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

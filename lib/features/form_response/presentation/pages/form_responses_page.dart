@@ -142,7 +142,7 @@ class _FormResponsesPageState extends State<FormResponsesPage> {
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.separated(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(bottom: 75),
                   itemCount: responses.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 12),

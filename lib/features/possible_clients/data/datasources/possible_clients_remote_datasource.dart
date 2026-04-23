@@ -35,7 +35,10 @@ class PossibleClientsRemoteDatasourceImpl
     );
 
     try {
-      await _firestore.collection('possible_clients').add(model.toJson());
+      await _firestore
+          .collection('possible_clients')
+          .doc(model.clientId)
+          .set(model.toJson());
     } on FirebaseException catch (e) {
       throw Exception('Failed to add possible client: ${e.message}');
     } catch (e) {
@@ -49,16 +52,12 @@ class PossibleClientsRemoteDatasourceImpl
   Stream<List<PossibleClientModel>> getPossibleClients() {
     return _firestore
         .collection('possible_clients')
-        .orderBy('submission_date', descending: true)
+        .orderBy('submissionDate', descending: true)
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {
             return PossibleClientModel.fromJson(doc.data());
           }).toList();
-
-          // possibleClients.sort(
-          //   (a, b) => b.submissionDate.compareTo(a.submissionDate),
-          // );
         })
         .handleError((e) {
           ServerException('Failed to fetch possible clients: $e');

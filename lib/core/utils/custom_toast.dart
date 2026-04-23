@@ -20,7 +20,7 @@ void showCustomToast(BuildContext context, String message) {
 
   fToast.showToast(
     child: toast,
-    gravity: ToastGravity.BOTTOM_RIGHT,
+    gravity: ToastGravity.BOTTOM_LEFT,
     toastDuration: const Duration(seconds: 3),
   );
 }
