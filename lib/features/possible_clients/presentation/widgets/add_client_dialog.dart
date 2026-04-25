@@ -23,8 +23,10 @@ class AddClientDialog extends StatefulWidget {
     this.hotelPreferences,
     this.flightPreferences,
     this.additionalInfo,
+    this.updateMode = false,
   });
 
+  final bool? updateMode;
   final String? id;
   final String? name;
   final String? phoneNumber;
@@ -144,8 +146,13 @@ class _AddClientDialogState extends State<AddClientDialog> {
       submissionDate: DateTime.now(),
     );
 
-    await context.read<PossibleClientsCubit>().addPossibleClients(newClient);
-
+    if (widget.updateMode == false) {
+      await context.read<PossibleClientsCubit>().addPossibleClients(newClient);
+    } else if (widget.updateMode == true) {
+      await context.read<PossibleClientsCubit>().updatePossibleClient(
+        newClient,
+      );
+    }
     if (!mounted) return;
 
     showCustomToast(context, 'تم حفظ بيانات العميل بنجاح');
@@ -235,10 +242,10 @@ class _AddClientDialogState extends State<AddClientDialog> {
                             Expanded(
                               child: CustomTextField(
                                 controller: expectedCostController,
-                                label: 'السعر المتوقع',
+                                label: 'سعر البرنامج',
                                 validator: (value) => validateString(
                                   value,
-                                  'برجى إدخال السعر المتوقع',
+                                  'برجى إدخال سعر البرنامج',
                                 ),
                               ),
                             ),

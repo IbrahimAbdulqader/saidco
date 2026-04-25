@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +6,7 @@ import 'package:saidco/core/utils/date_helper.dart';
 import 'package:saidco/features/form_response/presentation/widgets/profile_dialog.dart';
 import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_cubit.dart';
 import 'package:saidco/features/possible_clients/presentation/cubit/possible_clients_states.dart';
+import 'package:saidco/features/possible_clients/presentation/widgets/add_client_dialog.dart';
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/ui/common/data_cell.dart';
 import 'package:saidco/ui/common/header_cell.dart';
@@ -201,6 +200,43 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                       onTap: () {
                                         showDialog(
                                           context: context,
+                                          builder: (context) {
+                                            return BlocProvider.value(
+                                              value: possibleClientsCubit,
+                                              child: AddClientDialog(
+                                                updateMode: true,
+                                                id: possibleClient.clientId,
+                                                name: possibleClient.name,
+                                                phoneNumber:
+                                                    possibleClient.phoneNumber,
+                                                programLevel:
+                                                    possibleClient.programLevel,
+                                                expectedCost:
+                                                    possibleClient.expectedCost,
+                                                travelDate:
+                                                    possibleClient.travelDate,
+                                                dayCount:
+                                                    possibleClient.dayCount,
+                                                roomType:
+                                                    possibleClient.roomType,
+                                                hotelPreferences: possibleClient
+                                                    .hotelPreferences,
+                                                flightPreferences:
+                                                    possibleClient
+                                                        .flightPreferences,
+                                                additionalInfo: possibleClient
+                                                    .additionalInfo,
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Text('تعديل التسجيل'),
+                                    ),
+                                    PopupMenuItem(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
                                           builder: (dialogContext) => BlocProvider.value(
                                             value: possibleClientsCubit,
                                             child: AlertDialog(
@@ -253,11 +289,6 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                                             foregroundColor:
                                                                 Colors.red[700],
                                                             onPressed: () {
-                                                              log(
-                                                                possibleClient
-                                                                    .clientId
-                                                                    .toString(),
-                                                              );
                                                               possibleClientsCubit
                                                                   .deletePossibleClient(
                                                                     possibleClient
@@ -314,7 +345,6 @@ class _PossibleClientsPageState extends State<PossibleClientsPage> {
                                     : possibleClient.roomType,
                                 flex: 2,
                               ),
-
                               Icon(
                                 Icons.arrow_forward_ios,
                                 size: 16,
