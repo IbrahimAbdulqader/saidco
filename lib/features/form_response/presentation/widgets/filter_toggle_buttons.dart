@@ -18,7 +18,7 @@ class _FilterToggleButtonsState extends State<FilterToggleButtons> {
   @override
   Widget build(BuildContext context) {
     return ToggleButtons(
-      constraints: BoxConstraints(maxHeight: 35, minHeight: 35),
+      constraints: const BoxConstraints(maxHeight: 35, minHeight: 35),
       borderRadius: BorderRadius.circular(12),
       borderWidth: 2,
       borderColor: Colors.grey[500],
@@ -32,7 +32,7 @@ class _FilterToggleButtonsState extends State<FilterToggleButtons> {
       ),
       onPressed: widget.onPressed,
       isSelected: widget.isSelected,
-      children: [
+      children: const [
         SizedBox(width: 120, child: Center(child: Text('الكل'))),
         SizedBox(width: 120, child: Center(child: Text('لم يتم التواصل'))),
       ],

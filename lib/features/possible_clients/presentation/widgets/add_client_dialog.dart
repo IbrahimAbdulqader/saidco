@@ -9,8 +9,8 @@ import 'package:saidco/features/possible_clients/presentation/widgets/date_picke
 import 'package:saidco/ui/common/custom_button.dart';
 import 'package:saidco/core/utils/custom_toast.dart';
 
-class AddClientDialog extends StatefulWidget {
-  const AddClientDialog({
+class AddUpdateClientDialog extends StatefulWidget {
+  const AddUpdateClientDialog({
     super.key,
     this.id,
     this.name,
@@ -40,10 +40,10 @@ class AddClientDialog extends StatefulWidget {
   final String? additionalInfo;
 
   @override
-  State<AddClientDialog> createState() => _AddClientDialogState();
+  State<AddUpdateClientDialog> createState() => _AddUpdateClientDialogState();
 }
 
-class _AddClientDialogState extends State<AddClientDialog> {
+class _AddUpdateClientDialogState extends State<AddUpdateClientDialog> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -185,9 +185,9 @@ class _AddClientDialogState extends State<AddClientDialog> {
                       spacing: 20,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Center(
+                        const Center(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.symmetric(vertical: 10),
                             child: Text(
                               'إضافة عميل محتمل',
                               style: TextStyle(
@@ -238,7 +238,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
                                         .toList(),
                               ),
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
                             Expanded(
                               child: CustomTextField(
                                 controller: expectedCostController,
@@ -276,7 +276,7 @@ class _AddClientDialogState extends State<AddClientDialog> {
                                         .toList(),
                               ),
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
                             Expanded(
                               child: CustomDropdownMenu(
                                 errorMessage: roomTypeError,

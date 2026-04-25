@@ -50,9 +50,9 @@ class ProfileDialog extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          minHeight: 800,
-          minWidth: 600,
-          maxWidth: 600,
+          maxHeight: 900,
+          minWidth: 1100,
+          maxWidth: 1100,
         ),
         child: Padding(
           padding: const EdgeInsets.all(30.0),
@@ -68,7 +68,7 @@ class ProfileDialog extends StatelessWidget {
                   Row(
                     children: [
                       CustomRichText(title: 'الاسم', subtitle: name),
-                      Spacer(),
+                      const Spacer(),
                       if (isContacted != null)
                         Text(
                           isContacted! ? 'تم التواصل' : 'لم يتم التواصل',
@@ -85,7 +85,7 @@ class ProfileDialog extends StatelessWidget {
                         title: 'رقم الهاتف',
                         subtitle: phoneNumber,
                       ),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Padding(
                         padding: const EdgeInsets.only(top: 35),
                         child: IconButton(
@@ -94,8 +94,7 @@ class ProfileDialog extends StatelessWidget {
 
                             showCustomToast(context, 'تم النسخ بنجاح');
                           },
-
-                          icon: Icon(Icons.copy, size: 16),
+                          icon: const Icon(Icons.copy, size: 16),
                         ),
                       ),
                     ],
@@ -116,25 +115,44 @@ class ProfileDialog extends StatelessWidget {
                       spacing: 20,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomRichText(
-                          title: 'المستوى',
-                          subtitle: programLevel,
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 550,
+                              child: CustomRichText(
+                                title: 'المستوى',
+                                subtitle: programLevel,
+                              ),
+                            ),
+                            CustomRichText(
+                              title: 'السعر المتوقع',
+                              subtitle: expectedCost.trim() == ''
+                                  ? 'لا يوجد'
+                                  : expectedCost,
+                            ),
+                          ],
                         ),
-                        CustomRichText(
-                          title: 'السعر المتوقع',
-                          subtitle: expectedCost.trim() == ''
-                              ? 'لا يوجد'
-                              : expectedCost,
+
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 550,
+                              child: CustomRichText(
+                                title: 'نوع الغرفة',
+                                subtitle: roomType,
+                              ),
+                            ),
+                            CustomRichText(
+                              title: 'عدد الأيام',
+                              subtitle: dayCount.toString(),
+                            ),
+                          ],
                         ),
                         CustomRichText(
                           title: 'تاريخ السفر',
                           subtitle: formatDate(travelDate),
                         ),
-                        CustomRichText(
-                          title: 'عدد الأيام',
-                          subtitle: dayCount.toString(),
-                        ),
-                        CustomRichText(title: 'نوع الغرفة', subtitle: roomType),
+
                         CustomRichText(
                           title: 'ملاحظات الفنادق السكنية',
                           subtitle: hotelPreferences.trim() == ''
@@ -168,7 +186,7 @@ class ProfileDialog extends StatelessWidget {
                     text: 'إغلاق',
                     onPressed: () => Navigator.pop(context),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   if (isContacted != null && toggleContacted != null)
                     CustomButton(
                       text: !isContacted! ? 'تم التواصل' : 'لم يتم التواصل',

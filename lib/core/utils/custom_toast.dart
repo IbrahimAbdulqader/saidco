@@ -13,7 +13,7 @@ void showCustomToast(BuildContext context, String message) {
     ),
     child: Text(
       message,
-      style: TextStyle(color: Colors.white, fontSize: 14.0),
+      style: const TextStyle(color: Colors.white, fontSize: 14.0),
       textDirection: TextDirection.rtl,
     ),
   );

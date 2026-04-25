@@ -18,7 +18,7 @@ class HeaderCell extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, size: 16),
-          SizedBox(width: 6),
+          const SizedBox(width: 6),
           Text(
             text,
             style: TextStyle(

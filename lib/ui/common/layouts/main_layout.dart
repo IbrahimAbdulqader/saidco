@@ -24,10 +24,10 @@ class _MainLayoutState extends State<MainLayout> {
   ];
 
   final List<Widget> _pages = [
-    FormResponsesPage(),
-    PossibleClientsPage(),
-    Center(child: Text('صفحة إدارة التسكينات')),
-    Center(child: Text('صفحة إدارة الحسابات')),
+    const FormResponsesPage(),
+    const PossibleClientsPage(),
+    const Center(child: Text('صفحة إدارة التسكينات')),
+    const Center(child: Text('صفحة إدارة الحسابات')),
   ];
 
   int selectedIndex = 0;
@@ -40,15 +40,15 @@ class _MainLayoutState extends State<MainLayout> {
     return Padding(
       padding: const EdgeInsets.only(right: 130),
       child: FloatingActionButton.extended(
-        label: Text('إضافة عميل', style: TextStyle(fontSize: 14)),
-        extendedPadding: EdgeInsets.symmetric(horizontal: 20),
+        label: const Text('إضافة عميل', style: TextStyle(fontSize: 14)),
+        extendedPadding: const EdgeInsets.symmetric(horizontal: 20),
         onPressed: () {
           showDialog(
             context: context,
             builder: (context) {
               return BlocProvider(
                 create: (context) => sl<PossibleClientsCubit>(),
-                child: AddClientDialog(),
+                child: const AddUpdateClientDialog(),
               );
             },
           );
@@ -67,7 +67,7 @@ class _MainLayoutState extends State<MainLayout> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(100),
+          preferredSize: const Size.fromHeight(100),
           child: CustomAppBar(title: _titles[selectedIndex]),
         ),
         floatingActionButton: _buildFAB(context, selectedIndex),
@@ -96,9 +96,11 @@ class _MainLayoutState extends State<MainLayout> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   unselectedIconTheme: IconThemeData(color: Colors.grey[700]),
-                  selectedIconTheme: IconThemeData(color: Colors.deepPurple),
+                  selectedIconTheme: const IconThemeData(
+                    color: Colors.deepPurple,
+                  ),
                   unselectedLabelTextStyle: TextStyle(color: Colors.grey[700]),
-                  selectedLabelTextStyle: TextStyle(
+                  selectedLabelTextStyle: const TextStyle(
                     color: Colors.deepPurple,
                     fontWeight: FontWeight.bold,
                   ),
@@ -110,11 +112,11 @@ class _MainLayoutState extends State<MainLayout> {
                   leading: Column(
                     children: [
                       Image.asset('assets/images/logo.png', width: 100),
-                      SizedBox(height: 25),
+                      const SizedBox(height: 25),
                     ],
                   ),
                   labelType: NavigationRailLabelType.all,
-                  destinations: [
+                  destinations: const [
                     NavigationRailDestination(
                       padding: EdgeInsets.only(bottom: 12),
                       icon: Icon(Icons.table_chart_outlined),
@@ -159,7 +161,7 @@ class _MainLayoutState extends State<MainLayout> {
                     ),
                     child: Column(
                       children: [
-                        SizedBox(height: 100),
+                        const SizedBox(height: 100),
                         Expanded(child: _pages[selectedIndex]),
                       ],
                     ),

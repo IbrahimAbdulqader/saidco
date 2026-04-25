@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [Locale('en'), Locale('ar')],
       theme: ThemeData(textTheme: GoogleFonts.alexandriaTextTheme()),
-      home: MainLayout(),
+      home: const MainLayout(),
     );
   }
 }

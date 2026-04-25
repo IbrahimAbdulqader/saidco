@@ -24,10 +24,10 @@ class CustomDropdownMenu extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: Text(
             label,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         DropdownMenu(
           width: 510,
           errorText: errorMessage,
@@ -39,7 +39,7 @@ class CustomDropdownMenu extends StatelessWidget {
               maxHeight: errorMessage != null ? 60 : 40,
             ),
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 12),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey[400]!, width: 1.5),
               borderRadius: BorderRadius.circular(12),
@@ -52,7 +52,7 @@ class CustomDropdownMenu extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 1.5),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
               borderRadius: BorderRadius.circular(12),
             ),
             focusedErrorBorder: OutlineInputBorder(
