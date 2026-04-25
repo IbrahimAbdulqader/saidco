@@ -19,6 +19,7 @@ class _MainLayoutState extends State<MainLayout> {
   final List<String> _titles = [
     'تسجيلات العملاء',
     'العملاء المحتملين',
+    'إدارة الرحلات',
     'إدارة التسكينات',
     'إدارة الحسابات',
   ];
@@ -26,6 +27,7 @@ class _MainLayoutState extends State<MainLayout> {
   final List<Widget> _pages = [
     const FormResponsesPage(),
     const PossibleClientsPage(),
+    const Center(child: Text('صفحة إدارة الرحلات')),
     const Center(child: Text('صفحة إدارة التسكينات')),
     const Center(child: Text('صفحة إدارة الحسابات')),
   ];
@@ -129,6 +131,13 @@ class _MainLayoutState extends State<MainLayout> {
                       selectedIcon: Icon(Icons.group),
                       label: Text('العملاء المحتملين'),
                     ),
+                    NavigationRailDestination(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      icon: Icon(Icons.flight_takeoff_outlined),
+                      selectedIcon: Icon(Icons.flight_takeoff),
+                      label: Text('إدارة الرحلات'),
+                    ),
+
                     NavigationRailDestination(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       icon: Icon(Icons.hotel_outlined),

@@ -35,6 +35,7 @@ class PossibleClientListItem extends StatelessWidget {
             builder: (context) => BlocProvider.value(
               value: possibleClientsCubit,
               child: ProfileDialog(
+                isPossibleClient: true,
                 id: possibleClient.clientId,
                 name: possibleClient.name,
                 phoneNumber: possibleClient.phoneNumber,
@@ -103,6 +104,7 @@ class PossibleClientListItem extends StatelessWidget {
                                 travelDate: possibleClient.travelDate,
                                 dayCount: possibleClient.dayCount,
                                 roomType: possibleClient.roomType,
+                                familyInfo: possibleClient.familyInfo,
                                 hotelPreferences:
                                     possibleClient.hotelPreferences,
                                 flightPreferences:

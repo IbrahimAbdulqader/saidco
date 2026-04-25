@@ -11,6 +11,7 @@ class PossibleClientModel extends PossibleClient {
     required super.travelDate,
     required super.dayCount,
     required super.roomType,
+    required super.familyInfo,
     required super.hotelPreferences,
     required super.flightPreferences,
     required super.additionalInfo,
@@ -29,6 +30,7 @@ class PossibleClientModel extends PossibleClient {
       travelDate: jsonData['travelDate'] ?? 'تاريخ السفر غير موجود',
       dayCount: jsonData['dayCount'] ?? 'عدد الأيام غير موجود',
       roomType: jsonData['roomType'] ?? 'نوع الغرفة غير موجود',
+      familyInfo: jsonData['familyInfo'] ?? 'معلومات العائلة غير موجودة',
       hotelPreferences:
           jsonData['hotelPreferences'] ?? 'تفضيلات الفنادق غير موجودة',
       flightPreferences:
@@ -50,6 +52,7 @@ class PossibleClientModel extends PossibleClient {
       'travelDate': travelDate,
       'dayCount': dayCount,
       'roomType': roomType,
+      'familyInfo': familyInfo,
       'hotelPreferences': hotelPreferences,
       'flightPreferences': flightPreferences,
       'additionalInfo': additionalInfo,

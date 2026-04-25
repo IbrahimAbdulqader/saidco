@@ -21,6 +21,8 @@ class ProfileDialog extends StatelessWidget {
     required this.additionalInfo,
     this.isContacted,
     this.toggleContacted,
+    this.isPossibleClient,
+    this.familyInfo,
   });
 
   final String id;
@@ -31,12 +33,15 @@ class ProfileDialog extends StatelessWidget {
   final String travelDate;
   final String dayCount;
   final String roomType;
+  final String? familyInfo;
   final String hotelPreferences;
   final String flightPreferences;
   final String additionalInfo;
 
   final bool? isContacted;
   final VoidCallback? toggleContacted;
+
+  final bool? isPossibleClient;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +130,9 @@ class ProfileDialog extends StatelessWidget {
                               ),
                             ),
                             CustomRichText(
-                              title: 'السعر المتوقع',
+                              title: isPossibleClient == true
+                                  ? 'سعر البرنامج'
+                                  : 'السعر المتوقع',
                               subtitle: expectedCost.trim() == ''
                                   ? 'لا يوجد'
                                   : expectedCost,
@@ -153,6 +160,15 @@ class ProfileDialog extends StatelessWidget {
                           subtitle: formatDate(travelDate),
                         ),
 
+                        if (isPossibleClient == true)
+                          CustomRichText(
+                            title: 'ملاحظات الاسرة',
+                            subtitle:
+                                (familyInfo == null ||
+                                    familyInfo!.trim().isEmpty)
+                                ? 'لا يوجد'
+                                : familyInfo!,
+                          ),
                         CustomRichText(
                           title: 'ملاحظات الفنادق السكنية',
                           subtitle: hotelPreferences.trim() == ''

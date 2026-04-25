@@ -20,6 +20,7 @@ class AddUpdateClientDialog extends StatefulWidget {
     this.travelDate,
     this.dayCount,
     this.roomType,
+    this.familyInfo,
     this.hotelPreferences,
     this.flightPreferences,
     this.additionalInfo,
@@ -35,6 +36,7 @@ class AddUpdateClientDialog extends StatefulWidget {
   final String? travelDate;
   final String? dayCount;
   final String? roomType;
+  final String? familyInfo;
   final String? hotelPreferences;
   final String? flightPreferences;
   final String? additionalInfo;
@@ -51,6 +53,7 @@ class _AddUpdateClientDialogState extends State<AddUpdateClientDialog> {
   TextEditingController dayCountController = TextEditingController();
   TextEditingController roomTypeController = TextEditingController();
   TextEditingController expectedCostController = TextEditingController();
+  TextEditingController familyInfoController = TextEditingController();
   TextEditingController hotelPreferencesController = TextEditingController();
   TextEditingController flightPreferencesController = TextEditingController();
   TextEditingController additionalInfoController = TextEditingController();
@@ -81,6 +84,8 @@ class _AddUpdateClientDialogState extends State<AddUpdateClientDialog> {
     programLevelController = TextEditingController(text: widget.programLevel);
     dayCountController = TextEditingController(text: widget.dayCount);
     roomTypeController = TextEditingController(text: widget.roomType);
+    familyInfoController = TextEditingController(text: widget.familyInfo);
+
     if (widget.travelDate != null && widget.travelDate!.isNotEmpty) {
       myTravelDateVariable =
           DateTime.tryParse(widget.travelDate!) ?? DateTime.now();
@@ -93,6 +98,7 @@ class _AddUpdateClientDialogState extends State<AddUpdateClientDialog> {
     nameController.dispose();
     phoneController.dispose();
     expectedCostController.dispose();
+    familyInfoController.dispose();
     hotelPreferencesController.dispose();
     flightPreferencesController.dispose();
     additionalInfoController.dispose();
@@ -140,6 +146,7 @@ class _AddUpdateClientDialogState extends State<AddUpdateClientDialog> {
       travelDate: myTravelDateVariable.toString(),
       dayCount: dayCountController.text,
       roomType: roomTypeController.text,
+      familyInfo: familyInfoController.text,
       hotelPreferences: hotelPreferencesController.text,
       flightPreferences: flightPreferencesController.text,
       additionalInfo: additionalInfoController.text,
@@ -290,7 +297,7 @@ class _AddUpdateClientDialogState extends State<AddUpdateClientDialog> {
                                   }
                                 },
                                 dropdownMenuEntries:
-                                    ['فردي', 'ثنائي', 'ثلاثي', 'رباعي']
+                                    ['فردي', 'ثنائي', 'ثلاثي', 'خماسي']
                                         .map(
                                           (roomType) => DropdownMenuEntry(
                                             value: roomType,
@@ -309,6 +316,11 @@ class _AddUpdateClientDialogState extends State<AddUpdateClientDialog> {
                               myTravelDateVariable = newDate;
                             });
                           },
+                        ),
+                        CustomTextField(
+                          controller: familyInfoController,
+                          label: 'ملاحظات الاسرة',
+                          isMultiLine: true,
                         ),
                         CustomTextField(
                           controller: hotelPreferencesController,

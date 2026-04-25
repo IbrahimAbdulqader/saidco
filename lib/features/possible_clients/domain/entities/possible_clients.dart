@@ -9,6 +9,7 @@ class PossibleClient extends Equatable {
   final String travelDate;
   final String dayCount;
   final String roomType;
+  final String? familyInfo;
   final String hotelPreferences;
   final String flightPreferences;
   final String additionalInfo;
@@ -23,6 +24,7 @@ class PossibleClient extends Equatable {
     required this.travelDate,
     required this.dayCount,
     required this.roomType,
+    this.familyInfo,
     required this.hotelPreferences,
     required this.flightPreferences,
     required this.additionalInfo,
@@ -39,6 +41,7 @@ class PossibleClient extends Equatable {
     travelDate,
     dayCount,
     roomType,
+    familyInfo,
     hotelPreferences,
     flightPreferences,
     additionalInfo,

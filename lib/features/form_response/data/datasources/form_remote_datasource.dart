@@ -57,6 +57,7 @@ class FormRemoteDataSourceImpl implements FormRemoteRemoteDatasource {
       travelDate: possibleClient.travelDate,
       dayCount: possibleClient.dayCount,
       roomType: possibleClient.roomType,
+      familyInfo: possibleClient.familyInfo,
       hotelPreferences: possibleClient.hotelPreferences,
       flightPreferences: possibleClient.flightPreferences,
       additionalInfo: possibleClient.additionalInfo,
