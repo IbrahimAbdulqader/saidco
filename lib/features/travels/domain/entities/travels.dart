@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class Travels extends Equatable {
   const Travels({
+    required this.travelId,
     required this.travelDate,
     required this.makkaDayCount,
     required this.madinaDayCount,
@@ -10,6 +11,7 @@ class Travels extends Equatable {
     required this.cost,
   });
 
+  final String travelId;
   final DateTime travelDate;
   final String makkaDayCount;
   final String madinaDayCount;
